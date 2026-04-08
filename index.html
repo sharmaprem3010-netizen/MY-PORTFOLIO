@@ -84,6 +84,8 @@ h2{font-family:'Syne',sans-serif;font-size:1.55rem;font-weight:700;margin-bottom
 .empty-state{text-align:center;padding:44px 20px;color:var(--muted);border:2px dashed var(--border);border-radius:20px;grid-column:1/-1}
 .add-project-btn{display:none;align-items:center;gap:8px;background:rgba(0,229,160,.08);border:1px dashed rgba(0,229,160,.35);color:var(--accent);font-family:'Syne',sans-serif;font-size:13px;padding:10px 18px;border-radius:12px;cursor:pointer;margin-bottom:18px}
 .admin-mode .add-project-btn{display:flex}
+.project-card.has-link{cursor:pointer}
+.project-link-badge{position:absolute;top:8px;left:8px;background:rgba(0,229,160,.18);border:1px solid rgba(0,229,160,.35);color:var(--accent);font-size:11px;padding:3px 7px;border-radius:7px;line-height:1}
 
 /* TOOLS */
 .tools-wrap{display:flex;flex-wrap:wrap;gap:11px;align-items:center}
@@ -258,6 +260,7 @@ select option{background:#1a1a26}
       </select>
     </div>
     <div class="form-group"><label>Icon</label><div class="emoji-grid" id="emojiGrid"></div></div>
+    <div class="form-group"><label>Project Link <span style="color:var(--muted);font-size:12px">(optional)</span></label><input type="url" id="projLink" placeholder="https://example.com"/></div>
     <p class="error-msg" id="formError">Please fill in all fields.</p>
     <button class="submit-btn" id="saveProject">Save Project</button>
   </div>
@@ -377,20 +380,25 @@ function render(){
   }
 }
 
+function safeUrl(url){try{const u=new URL(url);return(u.protocol==='https:'||u.protocol==='http:')?u.href:'';}catch(e){return '';}}
 function renderProjects(){
   const d=getData();
   const grid=document.getElementById('projectsGrid');
   const projects=d.projects||[];
   if(!projects.length){grid.innerHTML='<div class="empty-state"><div style="font-size:2rem;margin-bottom:10px">📂</div><p>No projects yet.</p></div>';return;}
-  grid.innerHTML=projects.map(p=>`
-    <div class="project-card">
-      <button class="delete-btn" onclick="deleteProject('${p.id}')">🗑</button>
+  grid.innerHTML=projects.map(p=>{
+    const href=safeUrl(p.link||'');
+    const clickAttr=href?` onclick="window.open(this.dataset.href,'_blank')" data-href="${href.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}"`:'';
+    return `<div class="project-card${href?' has-link':''}"${clickAttr}>
+      <button class="delete-btn" onclick="event.stopPropagation();deleteProject(this.dataset.id)" data-id="${p.id}">🗑</button>
+      ${href?'<span class="project-link-badge">🔗</span>':''}
       <div class="project-emoji">${p.emoji}</div>
       <div class="project-body">
         <h4>${p.title}</h4><p>${p.desc}</p>
         <span class="project-type">${p.type}</span>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 window.deleteProject=function(id){
   if(!adminMode)return;
@@ -557,12 +565,13 @@ document.getElementById('saveProject').onclick=()=>{
   const title=document.getElementById('projTitle').value.trim();
   const desc=document.getElementById('projDesc').value.trim();
   const type=document.getElementById('projType').value;
+  const link=document.getElementById('projLink').value.trim();
   if(!title||!desc){document.getElementById('formError').style.display='block';return;}
   document.getElementById('formError').style.display='none';
-  const d=getData();d.projects.push({id:Date.now().toString(),title,desc,type,emoji:selectedEmoji});
+  const d=getData();d.projects.push({id:Date.now().toString(),title,desc,type,emoji:selectedEmoji,link:safeUrl(link)});
   saveData(d);renderProjects();
   document.getElementById('addProjectOverlay').classList.remove('open');
-  document.getElementById('projTitle').value='';document.getElementById('projDesc').value='';
+  document.getElementById('projTitle').value='';document.getElementById('projDesc').value='';document.getElementById('projLink').value='';
 };
 
 // ═══════════════════════════════════════════════════
