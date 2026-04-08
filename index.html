@@ -1,620 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Portfolio</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍💻</text></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0a0f;--card:#1a1a26;--accent:#00e5a0;--accent2:#7c6fff;--text:#f0f0f8;--muted:#888899;--border:rgba(255,255,255,0.07);--red:#ff5c5c}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 20% -10%,rgba(0,229,160,0.07),transparent 60%),radial-gradient(ellipse 60% 50% at 80% 110%,rgba(124,111,255,0.08),transparent 60%);pointer-events:none;z-index:0}
-.container{max-width:900px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
-nav{display:flex;justify-content:space-between;align-items:center;padding:20px 0;border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem}
-.nav-logo span{color:var(--accent)}
-.admin-btn{background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.25);color:var(--accent);font-size:13px;font-family:'Syne',sans-serif;padding:8px 16px;border-radius:10px;cursor:pointer;transition:all .2s}
-.admin-btn:hover{background:rgba(0,229,160,0.2)}
-.admin-banner{display:none;background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.2);border-radius:12px;padding:10px 16px;margin-top:14px;font-size:13px;color:var(--accent);align-items:center;gap:10px;flex-wrap:wrap}
-.admin-mode .admin-banner{display:flex}
-.logout-link{margin-left:auto;color:var(--muted);cursor:pointer;font-size:12px;text-decoration:underline}
-
-/* EDITABLE HINT */
-.editable{position:relative;cursor:default}
-.admin-mode .editable{cursor:pointer;border-radius:8px;transition:background .15s}
-.admin-mode .editable:hover{background:rgba(0,229,160,0.07)}
-.admin-mode .editable::after{content:'✎';position:absolute;top:-8px;right:-16px;font-size:11px;color:var(--accent);opacity:0;transition:opacity .2s;pointer-events:none}
-.admin-mode .editable:hover::after{opacity:1}
-
-/* HEADER */
-header{padding:52px 0 36px;text-align:center}
-.tag{display:inline-block;background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.25);color:var(--accent);font-size:12px;font-family:'Syne',sans-serif;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:20px}
-.profile-photo-wrap{position:relative;display:inline-block;margin-bottom:22px}
-.profile-photo,.profile-placeholder{width:108px;height:108px;border-radius:50%;border:3px solid rgba(0,229,160,0.4)}
-.profile-photo{object-fit:cover;display:none}
-.profile-placeholder{background:var(--card);display:flex;align-items:center;justify-content:center;font-size:2.4rem;color:var(--muted);border-style:dashed;border-color:rgba(0,229,160,0.3)}
-.change-photo-btn{position:absolute;bottom:4px;right:4px;background:var(--accent);color:#0a0a0f;width:26px;height:26px;border-radius:50%;border:none;cursor:pointer;font-size:13px;display:none;align-items:center;justify-content:center;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.4)}
-.admin-mode .change-photo-btn{display:flex}
-#siteTitle{font-family:'Syne',sans-serif;font-size:clamp(2rem,6vw,3.4rem);font-weight:800;line-height:1.05;letter-spacing:-1px}
-#siteTitle span{color:var(--accent)}
-#siteSubtitle{margin-top:12px;color:var(--muted);font-size:1rem;max-width:500px;margin-left:auto;margin-right:auto}
-.badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px}
-.badge{background:var(--card);border:1px solid var(--border);padding:6px 13px;border-radius:20px;font-size:13px;color:var(--muted);position:relative}
-.admin-mode .badge{cursor:pointer}
-.admin-mode .badge:hover{border-color:rgba(0,229,160,.4);background:rgba(0,229,160,.05)}
-.add-badge-btn{display:none;background:rgba(0,229,160,0.08);border:1px dashed rgba(0,229,160,.35);color:var(--accent);padding:6px 13px;border-radius:20px;font-size:13px;cursor:pointer}
-.admin-mode .add-badge-btn{display:inline-block}
-
-/* STATS */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:38px 0}
-.stat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center}
-.stat-num{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--accent)}
-.stat-label{font-size:12px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:1px}
-
-/* SECTIONS */
-section{margin:46px 0}
-.section-label{font-family:'Syne',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
-h2{font-family:'Syne',sans-serif;font-size:1.55rem;font-weight:700;margin-bottom:26px}
-
-/* SERVICES */
-.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-.service-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;transition:border-color .3s,transform .3s;position:relative}
-.service-card:hover{border-color:rgba(0,229,160,.3);transform:translateY(-3px)}
-.service-icon{font-size:1.8rem;margin-bottom:12px}
-.service-card h3{font-family:'Syne',sans-serif;font-size:.92rem;font-weight:700;margin-bottom:7px}
-.service-card p{font-size:13px;color:var(--muted);line-height:1.6}
-.service-tag{display:inline-block;margin-top:11px;font-size:11px;background:rgba(0,229,160,.08);color:var(--accent);border:1px solid rgba(0,229,160,.2);padding:3px 9px;border-radius:9px}
-.card-edit-btn{position:absolute;top:10px;right:10px;background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.2);color:var(--accent);width:26px;height:26px;border-radius:7px;cursor:pointer;font-size:12px;display:none;align-items:center;justify-content:center}
-.admin-mode .card-edit-btn{display:flex}
-.add-card-btn{display:none;align-items:center;gap:8px;background:rgba(0,229,160,.08);border:1px dashed rgba(0,229,160,.35);color:var(--accent);font-family:'Syne',sans-serif;font-size:13px;padding:10px 18px;border-radius:12px;cursor:pointer;margin-top:12px}
-.admin-mode .add-card-btn{display:flex}
-
-/* PROJECTS */
-.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px}
-.project-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;position:relative;transition:border-color .3s,transform .3s}
-.project-card:hover{border-color:rgba(0,229,160,.25);transform:translateY(-3px)}
-.project-emoji{background:linear-gradient(135deg,#1e1e2e,#2a1a3e);height:106px;display:flex;align-items:center;justify-content:center;font-size:2.6rem}
-.project-body{padding:16px}
-.project-body h4{font-family:'Syne',sans-serif;font-size:.92rem;font-weight:700;margin-bottom:6px}
-.project-body p{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:9px}
-.project-type{font-size:11px;background:rgba(124,111,255,.1);color:var(--accent2);border:1px solid rgba(124,111,255,.2);padding:3px 9px;border-radius:7px;display:inline-block}
-.delete-btn{position:absolute;top:8px;right:8px;background:rgba(255,92,92,.15);border:1px solid rgba(255,92,92,.3);color:var(--red);width:26px;height:26px;border-radius:7px;cursor:pointer;font-size:13px;display:none;align-items:center;justify-content:center}
-.admin-mode .delete-btn{display:flex}
-.empty-state{text-align:center;padding:44px 20px;color:var(--muted);border:2px dashed var(--border);border-radius:20px;grid-column:1/-1}
-.add-project-btn{display:none;align-items:center;gap:8px;background:rgba(0,229,160,.08);border:1px dashed rgba(0,229,160,.35);color:var(--accent);font-family:'Syne',sans-serif;font-size:13px;padding:10px 18px;border-radius:12px;cursor:pointer;margin-bottom:18px}
-.admin-mode .add-project-btn{display:flex}
-
-/* TOOLS */
-.tools-wrap{display:flex;flex-wrap:wrap;gap:11px;align-items:center}
-.tool{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:9px 15px;font-size:13px;display:flex;align-items:center;gap:7px}
-.tool-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0}
-.admin-mode .tool{cursor:pointer}
-.admin-mode .tool:hover{border-color:rgba(255,92,92,.4);background:rgba(255,92,92,.04)}
-.add-tool-btn{display:none;background:rgba(0,229,160,.08);border:1px dashed rgba(0,229,160,.35);color:var(--accent);padding:9px 15px;border-radius:11px;font-size:13px;cursor:pointer}
-.admin-mode .add-tool-btn{display:inline-flex;align-items:center;gap:6px}
-
-/* CTA */
-.cta{background:linear-gradient(135deg,rgba(0,229,160,.07),rgba(124,111,255,.07));border:1px solid rgba(0,229,160,.18);border-radius:24px;padding:42px;text-align:center;margin:46px 0}
-.cta h2{font-family:'Syne',sans-serif;font-size:1.55rem;font-weight:800;margin-bottom:10px}
-.cta p{color:var(--muted);margin-bottom:22px}
-.btn{display:inline-block;background:var(--accent);color:#0a0a0f;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;padding:13px 28px;border-radius:12px;text-decoration:none;transition:opacity .2s,transform .2s}
-.btn:hover{opacity:.85;transform:translateY(-2px)}
-footer{text-align:center;padding:26px 0;color:var(--muted);font-size:13px;border-top:1px solid var(--border)}
-
-/* MODALS */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(6px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
-.overlay.open{display:flex}
-.modal{background:#16161f;border:1px solid var(--border);border-radius:24px;padding:30px;width:100%;max-width:460px;position:relative;max-height:90vh;overflow-y:auto}
-.modal h3{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;margin-bottom:5px}
-.modal-sub{font-size:13px;color:var(--muted);margin-bottom:22px}
-.close-modal{position:absolute;top:14px;right:14px;background:var(--card);border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center}
-.form-group{margin-bottom:15px}
-label{display:block;font-size:11px;font-family:'Syne',sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
-input[type=text],input[type=password],textarea,select{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:11px 13px;border-radius:11px;outline:none;transition:border-color .2s}
-input:focus,textarea:focus,select:focus{border-color:rgba(0,229,160,.4)}
-textarea{resize:vertical;min-height:80px}
-select option{background:#1a1a26}
-.emoji-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:5px}
-.emoji-opt{background:var(--card);border:1px solid var(--border);border-radius:7px;padding:7px;text-align:center;cursor:pointer;font-size:1.2rem;transition:border-color .2s}
-.emoji-opt.selected,.emoji-opt:hover{border-color:var(--accent)}
-.submit-btn{width:100%;background:var(--accent);color:#0a0a0f;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;padding:13px;border-radius:11px;border:none;cursor:pointer;margin-top:6px;transition:opacity .2s}
-.submit-btn:hover{opacity:.85}
-.error-msg{color:var(--red);font-size:12px;margin-top:7px;display:none}
-.pin-inputs{display:flex;gap:10px;justify-content:center;margin:18px 0}
-.pin-input{width:50px;height:54px;text-align:center;font-size:1.4rem;font-family:'Syne',sans-serif;font-weight:700;background:var(--card);border:1px solid var(--border);border-radius:11px;color:var(--text);outline:none}
-.pin-input:focus{border-color:var(--accent)}
-.pin-error{color:var(--red);text-align:center;font-size:13px;margin-top:-6px;min-height:18px}
-.photo-drop-zone{border:2px dashed rgba(0,229,160,.3);border-radius:14px;padding:36px 20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:14px;position:relative}
-.photo-drop-zone:hover,.photo-drop-zone.drag-over{border-color:var(--accent);background:rgba(0,229,160,.05)}
-.photo-drop-zone .drop-icon{font-size:2.2rem;margin-bottom:8px}
-.photo-drop-zone p{color:var(--muted);font-size:13px;line-height:1.6}
-.photo-drop-zone strong{color:var(--accent)}
-#photoFileInput{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.photo-preview-wrap{display:none;text-align:center;margin-bottom:14px}
-.photo-preview-wrap img{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);margin-bottom:12px}
-.photo-actions{display:flex;gap:10px}
-.photo-actions button{flex:1;padding:10px;border-radius:9px;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:opacity .2s}
-.btn-save-photo{background:var(--accent);color:#0a0a0f}
-.btn-remove-photo{background:rgba(255,92,92,.12);color:var(--red);border:1px solid rgba(255,92,92,.3)!important}
-.btn-save-photo:hover,.btn-remove-photo:hover{opacity:.8}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="container">
-  <nav>
-    <div class="nav-logo" id="navLogo">Prem <span>Sharma</span></div>
-    <button class="admin-btn" id="adminBtn">⚙ Admin</button>
-  </nav>
-  <div class="admin-banner">
-    ✏️ Admin mode — click anything to edit it
-    <span class="logout-link" id="logoutBtn">Logout</span>
-  </div>
-
-  <header>
-    <div class="tag editable" id="tagEl" title="Click to edit">Available for work</div>
-    <div class="profile-photo-wrap">
-      <div class="profile-placeholder" id="profilePlaceholder">🧑‍💻</div>
-      <img class="profile-photo" id="profilePhoto" src="" alt=""/>
-      <button class="change-photo-btn" id="changePhotoBtn">✎</button>
+    <div class="portfolio">
+        <h1>My Projects</h1>
+        <button id="addProjectBtn">Add Project</button>
+        <div id="projectsContainer"></div>
     </div>
-    <h1 id="siteTitle">Prem <span>Sharma</span></h1>
-    <p id="siteSubtitle" class="editable subtitle">Data Entry Specialist · PDF Conversion · Form Filling · Excel Expert</p>
-    <div class="badges" id="badgesContainer"></div>
-  </header>
-
-  <div class="stats" id="statsContainer"></div>
-
-  <section>
-    <div class="section-label editable" id="servicesLabel">What I offer</div>
-    <h2 class="editable" id="servicesTitle">Services</h2>
-    <div class="services" id="servicesContainer"></div>
-    <button class="add-card-btn" id="addServiceBtn">＋ Add Service</button>
-  </section>
-
-  <section>
-    <div class="section-label editable" id="portfolioLabel">My work</div>
-    <h2 class="editable" id="portfolioTitle">Portfolio</h2>
-    <button class="add-project-btn" id="addProjectBtn">＋ Add New Project</button>
-    <div class="projects-grid" id="projectsGrid"></div>
-  </section>
-
-  <section>
-    <div class="section-label editable" id="toolsLabel">My toolkit</div>
-    <h2 class="editable" id="toolsTitle">Tools & Skills</h2>
-    <div class="tools-wrap" id="toolsContainer"></div>
-    <button class="add-tool-btn" id="addToolBtn" style="margin-top:12px">＋ Add Skill</button>
-  </section>
-
-  <div class="cta">
-    <h2 class="editable" id="ctaTitle">Ready to work together?</h2>
-    <p class="editable" id="ctaSubtitle">Fast delivery · Zero errors · Clear communication</p>
-    <a href="#" class="btn editable" id="ctaBtn">Hire me on Fiverr →</a>
-  </div>
-  <footer id="footerEl" class="editable">© 2026 Prem Sharma · Data Entry Specialist · West Bengal, India</footer>
-</div>
-
-<!-- LOGIN -->
-<div class="overlay" id="loginOverlay">
-  <div class="modal">
-    <button class="close-modal" id="closeLogin">×</button>
-    <h3>Admin Login</h3>
-    <p class="modal-sub">Enter your 4-digit PIN</p>
-    <div class="pin-inputs">
-      <input class="pin-input" maxlength="1" type="password" id="p1"/>
-      <input class="pin-input" maxlength="1" type="password" id="p2"/>
-      <input class="pin-input" maxlength="1" type="password" id="p3"/>
-      <input class="pin-input" maxlength="1" type="password" id="p4"/>
+    <div class="modal" id="addProjectModal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Add a New Project</h2>
+            <form id="addProjectForm">
+                <label for="projectTitle">Project Title:</label>
+                <input type="text" id="projectTitle" required>
+                <label for="projectDescription">Project Description:</label>
+                <textarea id="projectDescription" required></textarea>
+                <label for="projectLink">Project Link:</label>
+                <input type="url" id="projectLink" placeholder="Enter project URL">
+                <button type="submit">Add Project</button>
+            </form>
+        </div>
     </div>
-    <p class="pin-error" id="pinError"></p>
-    <button class="submit-btn" id="loginSubmit">Unlock Admin</button>
-  </div>
-</div>
+    <script>
+    const projects = [];
 
-<!-- PHOTO -->
-<div class="overlay" id="photoOverlay">
-  <div class="modal">
-    <button class="close-modal" id="closePhoto">×</button>
-    <h3>Profile Photo</h3>
-    <p class="modal-sub">Upload your photo — saved in your browser</p>
-    <div class="photo-drop-zone" id="photoDropZone">
-      <input type="file" id="photoFileInput" accept="image/*"/>
-      <div class="drop-icon">📸</div>
-      <p><strong>Click to upload</strong> or drag & drop<br/>JPG, PNG, WEBP supported</p>
-    </div>
-    <div class="photo-preview-wrap" id="photoPreviewWrap">
-      <img id="photoPreviewImg" src="" alt="Preview"/>
-      <div class="photo-actions">
-        <button class="btn-save-photo" id="savePhotoBtn">✅ Save Photo</button>
-        <button class="btn-remove-photo" id="removePhotoBtn">🗑 Remove</button>
-      </div>
-    </div>
-  </div>
-</div>
+    document.getElementById('addProjectBtn').onclick = function() {
+        document.getElementById('addProjectModal').style.display = 'block';
+    };
 
-<!-- GENERIC EDIT MODAL -->
-<div class="overlay" id="editOverlay">
-  <div class="modal">
-    <button class="close-modal" id="closeEdit">×</button>
-    <h3 id="editModalTitle">Edit</h3>
-    <p class="modal-sub" id="editModalSub"></p>
-    <div id="editModalBody"></div>
-    <button class="submit-btn" id="editSaveBtn">Save Changes</button>
-  </div>
-</div>
+    document.querySelector('.close-btn').onclick = function() {
+        document.getElementById('addProjectModal').style.display = 'none';
+    };
 
-<!-- ADD PROJECT -->
-<div class="overlay" id="addProjectOverlay">
-  <div class="modal">
-    <button class="close-modal" id="closeAddProject">×</button>
-    <h3>Add Project</h3>
-    <p class="modal-sub">Add a new portfolio item</p>
-    <div class="form-group"><label>Title</label><input type="text" id="projTitle" placeholder="e.g. Invoice PDF to Excel"/></div>
-    <div class="form-group"><label>Description</label><textarea id="projDesc" placeholder="What did you do?"></textarea></div>
-    <div class="form-group"><label>Category</label>
-      <select id="projType">
-        <option>PDF Conversion</option><option>Data Entry</option><option>Form Filling</option><option>Excel Work</option><option>Web Research</option><option>Other</option>
-      </select>
-    </div>
-    <div class="form-group"><label>Icon</label><div class="emoji-grid" id="emojiGrid"></div></div>
-    <p class="error-msg" id="formError">Please fill in all fields.</p>
-    <button class="submit-btn" id="saveProject">Save Project</button>
-  </div>
-</div>
+    document.getElementById('addProjectForm').onsubmit = function(event) {
+        event.preventDefault();
+        const title = document.getElementById('projectTitle').value;
+        const description = document.getElementById('projectDescription').value;
+        const link = document.getElementById('projectLink').value;
+        projects.push({title, description, link});
+        renderProjects();
+        document.getElementById('addProjectModal').style.display = 'none';
+    };
 
-<script>
-// ═══════════════════════════════════════════════════
-// DEFAULT DATA
-// ═══════════════════════════════════════════════════
-const DEFAULTS = {
-  tag:'Available for work',
-  title:'Prem Sharma',
-  subtitle:'Data Entry Specialist · PDF Conversion · Form Filling · Excel Expert',
-  badges:['📍 West Bengal, India','⚡ 24hr Delivery','✅ 100% Accuracy','🎓 BCA Student'],
-  stats:[{num:'24h',label:'Avg. Delivery'},{num:'100%',label:'Accuracy Rate'},{num:'0',label:'Missed Deadlines'}],
-  services:[
-    {icon:'📄',title:'PDF to Excel / Word',desc:'Convert any PDF — scanned or digital — into clean, editable Excel spreadsheets or Word documents.',tag:'Most Popular'},
-    {icon:'📋',title:'Form Filling & CRM Entry',desc:'Accurate online form filling, CRM data input, and database management. Fast and confidential.',tag:'High Demand'},
-    {icon:'📊',title:'Data Organization',desc:'Clean, sort, and structure messy data into well-formatted Excel or Google Sheets.',tag:'Excel Expert'}
-  ],
-  tools:['Microsoft Excel','Google Sheets','MS Word','PDF Tools','Data Formatting','Web Research','Typing 45+ WPM'],
-  ctaTitle:'Ready to work together?',
-  ctaSubtitle:'Fast delivery · Zero errors · Clear communication',
-  ctaBtn:'Hire me on Fiverr →',
-  ctaLink:'https://www.fiverr.com',
-  footer:'© 2026 Prem Sharma · Data Entry Specialist · West Bengal, India',
-  servicesLabel:'What I offer',
-  servicesTitle:'Services',
-  portfolioLabel:'My work',
-  portfolioTitle:'Portfolio',
-  toolsLabel:'My toolkit',
-  toolsTitle:'Tools & Skills',
-};
-const EMOJIS=['📄','📊','📋','🗂️','📑','📝','🖥️','💼','📈','🔢','🗃️','✅','📌','🖨️','💡','🧾','📂','🔍'];
-const PIN='1234'; // ← CHANGE THIS
-let adminMode=false, selectedEmoji=EMOJIS[0], pendingPhoto=null;
-
-// ═══════════════════════════════════════════════════
-// STORAGE
-// ═══════════════════════════════════════════════════
-function ls(key){const s=localStorage.getItem(key);return s?JSON.parse(s):null}
-function lss(key,val){localStorage.setItem(key,JSON.stringify(val))}
-function getData(){return ls('pf_data')||{...DEFAULTS,projects:[
-  {id:'1',title:'Invoice PDF → Excel',desc:'Converted 50-page invoice PDF into organized Excel with totals.',type:'PDF Conversion',emoji:'📄'},
-  {id:'2',title:'Student Data Entry',desc:'Organized 80+ student records into a structured spreadsheet.',type:'Data Entry',emoji:'📊'},
-  {id:'3',title:'Form Digitization',desc:'Transcribed handwritten forms into clean Word documents.',type:'Form Filling',emoji:'📝'}
-]}}
-function saveData(d){lss('pf_data',d)}
-
-// ═══════════════════════════════════════════════════
-// RENDER
-// ═══════════════════════════════════════════════════
-function render(){
-  const d=getData();
-  // tag
-  document.getElementById('tagEl').textContent=d.tag||DEFAULTS.tag;
-  // photo
-  const ph=localStorage.getItem('pf_photo');
-  const img=document.getElementById('profilePhoto');
-  const plc=document.getElementById('profilePlaceholder');
-  if(ph){img.src=ph;img.style.display='block';plc.style.display='none';}
-  else{img.style.display='none';plc.style.display='flex';}
-  // title
-  document.getElementById('siteTitle').innerHTML=(d.title||DEFAULTS.title).replace(/(\w+)\s(\w+)/,'$1 <span>$2</span>');
-  // subtitle
-  document.getElementById('siteSubtitle').textContent=d.subtitle||DEFAULTS.subtitle;
-  // nav logo
-  document.getElementById('navLogo').innerHTML=(d.title||DEFAULTS.title).replace(/(\w+)\s(\w+)/,'$1 <span>$2</span>');
-  // badges
-  const bc=document.getElementById('badgesContainer');
-  bc.innerHTML=(d.badges||DEFAULTS.badges).map((b,i)=>`<span class="badge" data-i="${i}">${b}</span>`).join('')
-    +`<button class="add-badge-btn" id="addBadgeBtn">＋</button>`;
-  if(adminMode) bc.querySelectorAll('.badge').forEach(b=>b.onclick=()=>editBadge(+b.dataset.i));
-  document.getElementById('addBadgeBtn')&&(document.getElementById('addBadgeBtn').onclick=()=>addBadge());
-  // stats
-  const sc=document.getElementById('statsContainer');
-  sc.innerHTML=(d.stats||DEFAULTS.stats).map((s,i)=>`
-    <div class="stat editable" data-i="${i}">
-      <div class="stat-num">${s.num}</div>
-      <div class="stat-label">${s.label}</div>
-    </div>`).join('');
-  if(adminMode) sc.querySelectorAll('.stat').forEach(s=>s.onclick=()=>editStat(+s.dataset.i));
-  // section labels & titles
-  ['servicesLabel','servicesTitle','portfolioLabel','portfolioTitle','toolsLabel','toolsTitle'].forEach(id=>{
-    document.getElementById(id).textContent=d[id]||DEFAULTS[id];
-    if(adminMode) document.getElementById(id).onclick=()=>editSimple(id,d[id]||DEFAULTS[id]);
-  });
-  // services
-  const svc=document.getElementById('servicesContainer');
-  svc.innerHTML=(d.services||DEFAULTS.services).map((s,i)=>`
-    <div class="service-card">
-      <button class="card-edit-btn" onclick="editService(${i})">✎</button>
-      <div class="service-icon">${s.icon}</div>
-      <h3>${s.title}</h3>
-      <p>${s.desc}</p>
-      <span class="service-tag">${s.tag}</span>
-    </div>`).join('');
-  // projects
-  renderProjects();
-  // tools
-  const tc=document.getElementById('toolsContainer');
-  tc.innerHTML=(d.tools||DEFAULTS.tools).map((t,i)=>`
-    <div class="tool" data-i="${i}"><span class="tool-dot"></span>${t}</div>`).join('');
-  if(adminMode) tc.querySelectorAll('.tool').forEach(t=>t.onclick=()=>editTool(+t.dataset.i));
-  // cta & footer
-  document.getElementById('ctaTitle').textContent=d.ctaTitle||DEFAULTS.ctaTitle;
-  document.getElementById('ctaSubtitle').textContent=d.ctaSubtitle||DEFAULTS.ctaSubtitle;
-  document.getElementById('ctaBtn').textContent=d.ctaBtn||DEFAULTS.ctaBtn;
-  document.getElementById('ctaBtn').href=d.ctaLink||DEFAULTS.ctaLink;
-  document.getElementById('footerEl').textContent=d.footer||DEFAULTS.footer;
-  if(adminMode){
-    ['ctaTitle','ctaSubtitle','ctaBtn','footerEl'].forEach(id=>{
-      document.getElementById(id).onclick=()=>editSimple(id,document.getElementById(id).textContent);
-    });
-    document.getElementById('tagEl').onclick=()=>editSimple('tag',d.tag||DEFAULTS.tag);
-    document.getElementById('siteSubtitle').onclick=()=>editSimple('subtitle',d.subtitle||DEFAULTS.subtitle);
-  }
-}
-
-function renderProjects(){
-  const d=getData();
-  const grid=document.getElementById('projectsGrid');
-  const projects=d.projects||[];
-  if(!projects.length){grid.innerHTML='<div class="empty-state"><div style="font-size:2rem;margin-bottom:10px">📂</div><p>No projects yet.</p></div>';return;}
-  grid.innerHTML=projects.map(p=>`
-    <div class="project-card">
-      <button class="delete-btn" onclick="deleteProject('${p.id}')">🗑</button>
-      <div class="project-emoji">${p.emoji}</div>
-      <div class="project-body">
-        <h4>${p.title}</h4><p>${p.desc}</p>
-        <span class="project-type">${p.type}</span>
-      </div>
-    </div>`).join('');
-}
-window.deleteProject=function(id){
-  if(!adminMode)return;
-  const d=getData();d.projects=d.projects.filter(p=>p.id!==id);saveData(d);renderProjects();
-};
-window.editService=function(i){
-  const d=getData(); const s=d.services[i];
-  openEditModal('Edit Service','',`
-    <div class="form-group"><label>Icon (emoji)</label><input type="text" id="ei_icon" value="${s.icon}" style="font-size:1.3rem"/></div>
-    <div class="form-group"><label>Title</label><input type="text" id="ei_title" value="${s.title}"/></div>
-    <div class="form-group"><label>Description</label><textarea id="ei_desc">${s.desc}</textarea></div>
-    <div class="form-group"><label>Tag</label><input type="text" id="ei_tag" value="${s.tag}"/></div>
-    <div style="display:flex;gap:10px;margin-top:4px">
-      <button onclick="deleteService(${i})" style="flex:1;padding:10px;border-radius:9px;background:rgba(255,92,92,.12);color:var(--red);border:1px solid rgba(255,92,92,.3);cursor:pointer;font-family:'Syne',sans-serif;font-weight:700">🗑 Delete</button>
-    </div>
-  `,()=>{
-    s.icon=document.getElementById('ei_icon').value.trim()||s.icon;
-    s.title=document.getElementById('ei_title').value.trim()||s.title;
-    s.desc=document.getElementById('ei_desc').value.trim()||s.desc;
-    s.tag=document.getElementById('ei_tag').value.trim()||s.tag;
-    d.services[i]=s; saveData(d); render(); closeAllModals();
-  });
-};
-window.deleteService=function(i){
-  const d=getData();d.services.splice(i,1);saveData(d);render();closeAllModals();
-};
-
-// ═══════════════════════════════════════════════════
-// GENERIC EDIT MODAL
-// ═══════════════════════════════════════════════════
-let _editCallback=null;
-function openEditModal(title,sub,bodyHTML,onSave){
-  document.getElementById('editModalTitle').textContent=title;
-  document.getElementById('editModalSub').textContent=sub;
-  document.getElementById('editModalBody').innerHTML=bodyHTML;
-  _editCallback=onSave;
-  document.getElementById('editOverlay').classList.add('open');
-}
-document.getElementById('editSaveBtn').onclick=()=>{if(_editCallback)_editCallback();};
-document.getElementById('closeEdit').onclick=closeAllModals;
-
-function editSimple(key,current){
-  const isTA=['subtitle','ctaSubtitle','footer'].includes(key);
-  const field=isTA?`<textarea id="ef_val" style="min-height:70px">${current}</textarea>`
-    :`<input type="text" id="ef_val" value="${current}"/>`;
-  openEditModal('Edit Text','',`<div class="form-group"><label>Content</label>${field}</div>`,()=>{
-    const val=document.getElementById('ef_val').value.trim();
-    if(!val)return;
-    const d=getData();
-    if(key==='ctaBtn'){d.ctaBtn=val;}
-    else if(key==='ctaLink'){d.ctaLink=val;}
-    else{d[key]=val;}
-    // special: title also updates nav
-    if(key==='siteTitle'||key==='title'){d.title=val;}
-    saveData(d);render();closeAllModals();
-  });
-  // special link editing for CTA button
-  if(key==='ctaBtn'){
-    const d=getData();
-    setTimeout(()=>{
-      document.getElementById('editModalBody').innerHTML+=
-        `<div class="form-group" style="margin-top:10px"><label>Fiverr Link (URL)</label><input type="text" id="ef_link" value="${d.ctaLink||DEFAULTS.ctaLink}"/></div>`;
-      _editCallback=()=>{
-        const val2=document.getElementById('ef_val').value.trim();
-        const lnk=document.getElementById('ef_link').value.trim();
-        if(!val2)return;
-        const dd=getData();dd.ctaBtn=val2;if(lnk)dd.ctaLink=lnk;
-        saveData(dd);render();closeAllModals();
-      };
-    },0);
-  }
-}
-
-function editStat(i){
-  const d=getData(); const s=d.stats[i];
-  openEditModal('Edit Stat','',`
-    <div class="row2">
-      <div class="form-group"><label>Value</label><input type="text" id="es_num" value="${s.num}"/></div>
-      <div class="form-group"><label>Label</label><input type="text" id="es_label" value="${s.label}"/></div>
-    </div>`,()=>{
-    d.stats[i]={num:document.getElementById('es_num').value.trim()||s.num,label:document.getElementById('es_label').value.trim()||s.label};
-    saveData(d);render();closeAllModals();
-  });
-}
-
-function editBadge(i){
-  const d=getData();const b=d.badges[i];
-  openEditModal('Edit Badge','',`
-    <div class="form-group"><label>Badge Text</label><input type="text" id="eb_val" value="${b}"/></div>
-    <button onclick="deleteBadge(${i})" style="width:100%;padding:10px;border-radius:9px;background:rgba(255,92,92,.12);color:var(--red);border:1px solid rgba(255,92,92,.3);cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;margin-top:4px">🗑 Delete Badge</button>
-  `,()=>{
-    const val=document.getElementById('eb_val').value.trim();
-    if(!val)return;
-    d.badges[i]=val;saveData(d);render();closeAllModals();
-  });
-}
-window.deleteBadge=function(i){const d=getData();d.badges.splice(i,1);saveData(d);render();closeAllModals();};
-function addBadge(){
-  openEditModal('Add Badge','',`<div class="form-group"><label>Badge Text (use emoji + text)</label><input type="text" id="nb_val" placeholder="🌟 New Badge"/></div>`,()=>{
-    const val=document.getElementById('nb_val').value.trim();if(!val)return;
-    const d=getData();d.badges.push(val);saveData(d);render();closeAllModals();
-  });
-}
-
-function editTool(i){
-  const d=getData();const t=d.tools[i];
-  openEditModal('Edit Skill','',`
-    <div class="form-group"><label>Skill Name</label><input type="text" id="et_val" value="${t}"/></div>
-    <button onclick="deleteTool(${i})" style="width:100%;padding:10px;border-radius:9px;background:rgba(255,92,92,.12);color:var(--red);border:1px solid rgba(255,92,92,.3);cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;margin-top:4px">🗑 Delete Skill</button>
-  `,()=>{
-    const val=document.getElementById('et_val').value.trim();if(!val)return;
-    d.tools[i]=val;saveData(d);render();closeAllModals();
-  });
-}
-window.deleteTool=function(i){const d=getData();d.tools.splice(i,1);saveData(d);render();closeAllModals();};
-document.getElementById('addToolBtn').onclick=()=>{
-  openEditModal('Add Skill','',`<div class="form-group"><label>Skill Name</label><input type="text" id="nt_val" placeholder="e.g. Airtable"/></div>`,()=>{
-    const val=document.getElementById('nt_val').value.trim();if(!val)return;
-    const d=getData();d.tools.push(val);saveData(d);render();closeAllModals();
-  });
-};
-document.getElementById('addServiceBtn').onclick=()=>{
-  openEditModal('Add Service','',`
-    <div class="form-group"><label>Icon (emoji)</label><input type="text" id="ns_icon" placeholder="📄" style="font-size:1.3rem"/></div>
-    <div class="form-group"><label>Title</label><input type="text" id="ns_title" placeholder="Service name"/></div>
-    <div class="form-group"><label>Description</label><textarea id="ns_desc" placeholder="What do you offer?"></textarea></div>
-    <div class="form-group"><label>Tag</label><input type="text" id="ns_tag" placeholder="e.g. Popular"/></div>
-  `,()=>{
-    const icon=document.getElementById('ns_icon').value.trim()||'📋';
-    const title=document.getElementById('ns_title').value.trim();
-    const desc=document.getElementById('ns_desc').value.trim();
-    const tag=document.getElementById('ns_tag').value.trim()||'New';
-    if(!title||!desc)return;
-    const d=getData();d.services.push({icon,title,desc,tag});saveData(d);render();closeAllModals();
-  });
-};
-
-// ═══════════════════════════════════════════════════
-// TITLE EDIT (click on h1)
-// ═══════════════════════════════════════════════════
-document.getElementById('siteTitle').addEventListener('click',()=>{
-  if(!adminMode)return;
-  const d=getData();
-  openEditModal('Edit Name','Your name as shown on the portfolio',`
-    <div class="form-group"><label>Full Name</label><input type="text" id="ef_name" value="${d.title||DEFAULTS.title}"/></div>
-  `,()=>{
-    const val=document.getElementById('ef_name').value.trim();if(!val)return;
-    const dd=getData();dd.title=val;saveData(dd);render();closeAllModals();
-  });
-});
-
-// ═══════════════════════════════════════════════════
-// ADD PROJECT
-// ═══════════════════════════════════════════════════
-const emojiGrid=document.getElementById('emojiGrid');
-EMOJIS.forEach((e,i)=>{
-  const d=document.createElement('div');d.className='emoji-opt'+(i===0?' selected':'');d.textContent=e;
-  d.onclick=()=>{document.querySelectorAll('.emoji-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');selectedEmoji=e;};
-  emojiGrid.appendChild(d);
-});
-document.getElementById('addProjectBtn').onclick=()=>document.getElementById('addProjectOverlay').classList.add('open');
-document.getElementById('closeAddProject').onclick=()=>document.getElementById('addProjectOverlay').classList.remove('open');
-document.getElementById('saveProject').onclick=()=>{
-  const title=document.getElementById('projTitle').value.trim();
-  const desc=document.getElementById('projDesc').value.trim();
-  const type=document.getElementById('projType').value;
-  if(!title||!desc){document.getElementById('formError').style.display='block';return;}
-  document.getElementById('formError').style.display='none';
-  const d=getData();d.projects.push({id:Date.now().toString(),title,desc,type,emoji:selectedEmoji});
-  saveData(d);renderProjects();
-  document.getElementById('addProjectOverlay').classList.remove('open');
-  document.getElementById('projTitle').value='';document.getElementById('projDesc').value='';
-};
-
-// ═══════════════════════════════════════════════════
-// PHOTO
-// ═══════════════════════════════════════════════════
-document.getElementById('changePhotoBtn').onclick=()=>document.getElementById('photoOverlay').classList.add('open');
-document.getElementById('closePhoto').onclick=()=>{document.getElementById('photoOverlay').classList.remove('open');resetPhotoModal();};
-const photoFileInput=document.getElementById('photoFileInput');
-const photoDropZone=document.getElementById('photoDropZone');
-function showPhotoPreview(b64){
-  pendingPhoto=b64;photoPreviewImg.src=b64;
-  document.getElementById('photoPreviewImg').src=b64;
-  photoDropZone.style.display='none';document.getElementById('photoPreviewWrap').style.display='block';
-}
-function resetPhotoModal(){pendingPhoto=null;photoDropZone.style.display='block';document.getElementById('photoPreviewWrap').style.display='none';photoFileInput.value='';}
-photoFileInput.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>showPhotoPreview(ev.target.result);r.readAsDataURL(f);};
-photoDropZone.addEventListener('dragover',e=>{e.preventDefault();photoDropZone.classList.add('drag-over');});
-photoDropZone.addEventListener('dragleave',()=>photoDropZone.classList.remove('drag-over'));
-photoDropZone.addEventListener('drop',e=>{e.preventDefault();photoDropZone.classList.remove('drag-over');const f=e.dataTransfer.files[0];if(!f||!f.type.startsWith('image/'))return;const r=new FileReader();r.onload=ev=>showPhotoPreview(ev.target.result);r.readAsDataURL(f);});
-document.getElementById('savePhotoBtn').onclick=()=>{if(!pendingPhoto)return;localStorage.setItem('pf_photo',pendingPhoto);render();document.getElementById('photoOverlay').classList.remove('open');resetPhotoModal();};
-document.getElementById('removePhotoBtn').onclick=()=>{localStorage.removeItem('pf_photo');render();document.getElementById('photoOverlay').classList.remove('open');resetPhotoModal();};
-
-// ═══════════════════════════════════════════════════
-// ADMIN / PIN
-// ═══════════════════════════════════════════════════
-document.getElementById('adminBtn').onclick=()=>{if(!adminMode)document.getElementById('loginOverlay').classList.add('open');};
-document.getElementById('closeLogin').onclick=()=>document.getElementById('loginOverlay').classList.remove('open');
-document.getElementById('logoutBtn').onclick=()=>{adminMode=false;document.body.classList.remove('admin-mode');render();};
-const pinInputs=['p1','p2','p3','p4'].map(id=>document.getElementById(id));
-pinInputs.forEach((inp,i)=>{
-  inp.addEventListener('input',()=>{if(inp.value&&i<3)pinInputs[i+1].focus();});
-  inp.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!inp.value&&i>0)pinInputs[i-1].focus();});
-});
-document.getElementById('loginSubmit').onclick=()=>{
-  const entered=pinInputs.map(i=>i.value).join('');
-  if(entered===PIN){
-    adminMode=true;document.body.classList.add('admin-mode');
-    document.getElementById('loginOverlay').classList.remove('open');
-    pinInputs.forEach(i=>i.value='');
-    document.getElementById('pinError').textContent='';
-    render();
-  } else {
-    document.getElementById('pinError').textContent='Wrong PIN. Try again.';
-    pinInputs.forEach(i=>i.value='');pinInputs[0].focus();
-  }
-};
-
-function closeAllModals(){document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('open'));}
-document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o){o.classList.remove('open');if(o.id==='photoOverlay')resetPhotoModal();}}));
-
-render();
-</script>
+    function renderProjects() {
+        const container = document.getElementById('projectsContainer');
+        container.innerHTML = '';
+        projects.forEach(project => {
+            const projectCard = document.createElement('div');
+            projectCard.className = 'project-card';
+            projectCard.innerHTML = `<h3>${project.title}</h3><p>${project.description}</p>`;
+            if (project.link) {
+                const linkElement = document.createElement('a');
+                linkElement.href = project.link;
+                linkElement.target = '_blank';
+                linkElement.innerText = 'View Project';
+                projectCard.appendChild(linkElement);
+                projectCard.style.cursor = 'pointer';
+            }
+            container.appendChild(projectCard);
+        });
+    }
+    </script>
 </body>
 </html>
