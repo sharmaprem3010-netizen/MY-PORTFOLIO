@@ -72,13 +72,16 @@ h2{font-family:'Syne',sans-serif;font-size:1.55rem;font-weight:700;margin-bottom
 
 /* PROJECTS */
 .projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px}
-.project-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;position:relative;transition:border-color .3s,transform .3s}
+.project-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;position:relative;transition:border-color .3s,transform .3s;display:flex;flex-direction:column;}
 .project-card:hover{border-color:rgba(0,229,160,.25);transform:translateY(-3px)}
 .project-emoji{background:linear-gradient(135deg,#1e1e2e,#2a1a3e);height:106px;display:flex;align-items:center;justify-content:center;font-size:2.6rem}
-.project-body{padding:16px}
+.project-body{padding:16px;display:flex;flex-direction:column;flex-grow:1;}
 .project-body h4{font-family:'Syne',sans-serif;font-size:.92rem;font-weight:700;margin-bottom:6px}
-.project-body p{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:9px}
+.project-body p{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:9px;flex-grow:1;}
+.project-meta {display:flex; justify-content:space-between; align-items:center; margin-top:10px;}
 .project-type{font-size:11px;background:rgba(124,111,255,.1);color:var(--accent2);border:1px solid rgba(124,111,255,.2);padding:3px 9px;border-radius:7px;display:inline-block}
+.project-link{font-size:12px; color:var(--accent); text-decoration:none; font-weight:700; display:flex; align-items:center; gap:4px; transition:opacity .2s;}
+.project-link:hover{opacity:0.8; text-decoration:underline;}
 .delete-btn{position:absolute;top:8px;right:8px;background:rgba(255,92,92,.15);border:1px solid rgba(255,92,92,.3);color:var(--red);width:26px;height:26px;border-radius:7px;cursor:pointer;font-size:13px;display:none;align-items:center;justify-content:center}
 .admin-mode .delete-btn{display:flex}
 .empty-state{text-align:center;padding:44px 20px;color:var(--muted);border:2px dashed var(--border);border-radius:20px;grid-column:1/-1}
@@ -195,7 +198,6 @@ select option{background:#1a1a26}
   <footer id="footerEl" class="editable">© 2026 Prem Sharma · Data Entry Specialist · West Bengal, India</footer>
 </div>
 
-<!-- LOGIN -->
 <div class="overlay" id="loginOverlay">
   <div class="modal">
     <button class="close-modal" id="closeLogin">×</button>
@@ -212,7 +214,6 @@ select option{background:#1a1a26}
   </div>
 </div>
 
-<!-- PHOTO -->
 <div class="overlay" id="photoOverlay">
   <div class="modal">
     <button class="close-modal" id="closePhoto">×</button>
@@ -233,7 +234,6 @@ select option{background:#1a1a26}
   </div>
 </div>
 
-<!-- GENERIC EDIT MODAL -->
 <div class="overlay" id="editOverlay">
   <div class="modal">
     <button class="close-modal" id="closeEdit">×</button>
@@ -244,7 +244,6 @@ select option{background:#1a1a26}
   </div>
 </div>
 
-<!-- ADD PROJECT -->
 <div class="overlay" id="addProjectOverlay">
   <div class="modal">
     <button class="close-modal" id="closeAddProject">×</button>
@@ -257,8 +256,9 @@ select option{background:#1a1a26}
         <option>PDF Conversion</option><option>Data Entry</option><option>Form Filling</option><option>Excel Work</option><option>Web Research</option><option>Other</option>
       </select>
     </div>
+    <div class="form-group"><label>Project Link (URL)</label><input type="text" id="projLink" placeholder="https://example.com" /></div>
     <div class="form-group"><label>Icon</label><div class="emoji-grid" id="emojiGrid"></div></div>
-    <p class="error-msg" id="formError">Please fill in all fields.</p>
+    <p class="error-msg" id="formError">Please fill in title and description fields.</p>
     <button class="submit-btn" id="saveProject">Save Project</button>
   </div>
 </div>
@@ -301,9 +301,9 @@ let adminMode=false, selectedEmoji=EMOJIS[0], pendingPhoto=null;
 function ls(key){const s=localStorage.getItem(key);return s?JSON.parse(s):null}
 function lss(key,val){localStorage.setItem(key,JSON.stringify(val))}
 function getData(){return ls('pf_data')||{...DEFAULTS,projects:[
-  {id:'1',title:'Invoice PDF → Excel',desc:'Converted 50-page invoice PDF into organized Excel with totals.',type:'PDF Conversion',emoji:'📄'},
-  {id:'2',title:'Student Data Entry',desc:'Organized 80+ student records into a structured spreadsheet.',type:'Data Entry',emoji:'📊'},
-  {id:'3',title:'Form Digitization',desc:'Transcribed handwritten forms into clean Word documents.',type:'Form Filling',emoji:'📝'}
+  {id:'1',title:'Invoice PDF → Excel',desc:'Converted 50-page invoice PDF into organized Excel with totals.',type:'PDF Conversion',emoji:'📄',link:''},
+  {id:'2',title:'Student Data Entry',desc:'Organized 80+ student records into a structured spreadsheet.',type:'Data Entry',emoji:'📊',link:''},
+  {id:'3',title:'Form Digitization',desc:'Transcribed handwritten forms into clean Word documents.',type:'Form Filling',emoji:'📝',link:''}
 ]}}
 function saveData(d){lss('pf_data',d)}
 
@@ -387,8 +387,12 @@ function renderProjects(){
       <button class="delete-btn" onclick="deleteProject('${p.id}')">🗑</button>
       <div class="project-emoji">${p.emoji}</div>
       <div class="project-body">
-        <h4>${p.title}</h4><p>${p.desc}</p>
-        <span class="project-type">${p.type}</span>
+        <h4>${p.title}</h4>
+        <p>${p.desc}</p>
+        <div class="project-meta">
+          <span class="project-type">${p.type}</span>
+          ${p.link ? `<a href="${p.link}" target="_blank" class="project-link">View ↗</a>` : ''}
+        </div>
       </div>
     </div>`).join('');
 }
@@ -557,12 +561,17 @@ document.getElementById('saveProject').onclick=()=>{
   const title=document.getElementById('projTitle').value.trim();
   const desc=document.getElementById('projDesc').value.trim();
   const type=document.getElementById('projType').value;
+  const link=document.getElementById('projLink').value.trim(); // Captured link
+  
   if(!title||!desc){document.getElementById('formError').style.display='block';return;}
   document.getElementById('formError').style.display='none';
-  const d=getData();d.projects.push({id:Date.now().toString(),title,desc,type,emoji:selectedEmoji});
+  const d=getData();
+  d.projects.push({id:Date.now().toString(),title,desc,type,emoji:selectedEmoji,link});
   saveData(d);renderProjects();
   document.getElementById('addProjectOverlay').classList.remove('open');
-  document.getElementById('projTitle').value='';document.getElementById('projDesc').value='';
+  document.getElementById('projTitle').value='';
+  document.getElementById('projDesc').value='';
+  document.getElementById('projLink').value='';
 };
 
 // ═══════════════════════════════════════════════════
