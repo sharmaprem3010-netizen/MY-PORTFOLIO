@@ -294,18 +294,63 @@ const DEFAULTS = {
 const EMOJIS=['📄','📊','📋','🗂️','📑','📝','🖥️','💼','📈','🔢','🗃️','✅','📌','🖨️','💡','🧾','📂','🔍'];
 const PIN='1234'; // ← CHANGE THIS
 let adminMode=false, selectedEmoji=EMOJIS[0], pendingPhoto=null;
+let portfolioState=null;
+const API_URL='/api/portfolio';
 
 // ═══════════════════════════════════════════════════
 // STORAGE
 // ═══════════════════════════════════════════════════
-function ls(key){const s=localStorage.getItem(key);return s?JSON.parse(s):null}
-function lss(key,val){localStorage.setItem(key,JSON.stringify(val))}
-function getData(){return ls('pf_data')||{...DEFAULTS,projects:[
-  {id:'1',title:'Invoice PDF → Excel',desc:'Converted 50-page invoice PDF into organized Excel with totals.',type:'PDF Conversion',emoji:'📄',link:''},
-  {id:'2',title:'Student Data Entry',desc:'Organized 80+ student records into a structured spreadsheet.',type:'Data Entry',emoji:'📊',link:''},
-  {id:'3',title:'Form Digitization',desc:'Transcribed handwritten forms into clean Word documents.',type:'Form Filling',emoji:'📝',link:''}
-]}}
-function saveData(d){lss('pf_data',d)}
+function cloneDefaults(){return JSON.parse(JSON.stringify(DEFAULTS));}
+function getInitialData(){
+  return {
+    ...cloneDefaults(),
+    photo:null,
+    projects:[
+      {id:'1',title:'Invoice PDF → Excel',desc:'Converted 50-page invoice PDF into organized Excel with totals.',type:'PDF Conversion',emoji:'📄',link:''},
+      {id:'2',title:'Student Data Entry',desc:'Organized 80+ student records into a structured spreadsheet.',type:'Data Entry',emoji:'📊',link:''},
+      {id:'3',title:'Form Digitization',desc:'Transcribed handwritten forms into clean Word documents.',type:'Form Filling',emoji:'📝',link:''}
+    ]
+  };
+}
+function normalizeData(d){
+  const base=getInitialData();
+  const source=d&&typeof d==='object'?d:{};
+  return {
+    ...base,
+    ...source,
+    photo:typeof source.photo==='string'?source.photo:null,
+    badges:Array.isArray(source.badges)?source.badges:base.badges,
+    stats:Array.isArray(source.stats)?source.stats:base.stats,
+    services:Array.isArray(source.services)?source.services:base.services,
+    tools:Array.isArray(source.tools)?source.tools:base.tools,
+    projects:Array.isArray(source.projects)?source.projects:base.projects,
+  };
+}
+function getData(){return portfolioState?normalizeData(portfolioState):getInitialData();}
+function cacheData(d){localStorage.setItem('pf_cache',JSON.stringify(d));}
+async function persistData(d){
+  portfolioState=normalizeData(d);
+  cacheData(portfolioState);
+  try{
+    await fetch(API_URL,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(portfolioState)});
+  }catch(error){
+    console.warn('Saving to backend failed, keeping local cache only.',error);
+  }
+}
+async function loadData(){
+  try{
+    const response=await fetch(API_URL,{cache:'no-store'});
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    const data=await response.json();
+    portfolioState=normalizeData(data);
+    cacheData(portfolioState);
+  }catch(error){
+    const cached=localStorage.getItem('pf_cache');
+    portfolioState=cached?normalizeData(JSON.parse(cached)):getInitialData();
+    console.warn('Loaded portfolio from cache/defaults because backend was unavailable.',error);
+  }
+}
+function saveData(d){void persistData(d)}
 
 // ═══════════════════════════════════════════════════
 // RENDER
@@ -315,7 +360,7 @@ function render(){
   // tag
   document.getElementById('tagEl').textContent=d.tag||DEFAULTS.tag;
   // photo
-  const ph=localStorage.getItem('pf_photo');
+  const ph=d.photo;
   const img=document.getElementById('profilePhoto');
   const plc=document.getElementById('profilePlaceholder');
   if(ph){img.src=ph;img.style.display='block';plc.style.display='none';}
@@ -591,8 +636,8 @@ photoFileInput.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new F
 photoDropZone.addEventListener('dragover',e=>{e.preventDefault();photoDropZone.classList.add('drag-over');});
 photoDropZone.addEventListener('dragleave',()=>photoDropZone.classList.remove('drag-over'));
 photoDropZone.addEventListener('drop',e=>{e.preventDefault();photoDropZone.classList.remove('drag-over');const f=e.dataTransfer.files[0];if(!f||!f.type.startsWith('image/'))return;const r=new FileReader();r.onload=ev=>showPhotoPreview(ev.target.result);r.readAsDataURL(f);});
-document.getElementById('savePhotoBtn').onclick=()=>{if(!pendingPhoto)return;localStorage.setItem('pf_photo',pendingPhoto);render();document.getElementById('photoOverlay').classList.remove('open');resetPhotoModal();};
-document.getElementById('removePhotoBtn').onclick=()=>{localStorage.removeItem('pf_photo');render();document.getElementById('photoOverlay').classList.remove('open');resetPhotoModal();};
+document.getElementById('savePhotoBtn').onclick=()=>{if(!pendingPhoto)return;const d=getData();d.photo=pendingPhoto;saveData(d);render();document.getElementById('photoOverlay').classList.remove('open');resetPhotoModal();};
+document.getElementById('removePhotoBtn').onclick=()=>{const d=getData();d.photo=null;saveData(d);render();document.getElementById('photoOverlay').classList.remove('open');resetPhotoModal();};
 
 // ═══════════════════════════════════════════════════
 // ADMIN / PIN
@@ -622,7 +667,7 @@ document.getElementById('loginSubmit').onclick=()=>{
 function closeAllModals(){document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('open'));}
 document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o){o.classList.remove('open');if(o.id==='photoOverlay')resetPhotoModal();}}));
 
-render();
+(async()=>{await loadData();render();})();
 </script>
 </body>
 </html>
