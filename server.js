@@ -152,6 +152,23 @@ async function readBody(req) {
   return raw ? JSON.parse(raw) : {};
 }
 
+async function readBodyText(req) {
+  const chunks = [];
+  let totalSize = 0;
+
+  for await (const chunk of req) {
+    totalSize += chunk.length;
+    if (totalSize > MAX_BODY_SIZE) {
+      const error = new Error('Request body too large');
+      error.statusCode = 413;
+      throw error;
+    }
+    chunks.push(chunk);
+  }
+
+  return Buffer.concat(chunks).toString('utf8');
+}
+
 async function serveIndex(res) {
   const html = await fs.readFile(INDEX_FILE, 'utf8');
   sendText(res, 200, html, 'text/html; charset=utf-8');
@@ -180,6 +197,17 @@ const server = http.createServer(async (req, res) => {
       const body = await readBody(req);
       const saved = await saveData(body);
       sendJson(res, 200, saved);
+      return;
+    }
+
+    if (req.url === '/api/save-html' && req.method === 'PUT') {
+      const bodyText = await readBodyText(req);
+      if (!bodyText || !bodyText.trim().startsWith('<!DOCTYPE html>')) {
+        sendJson(res, 400, { error: 'Invalid HTML format' });
+        return;
+      }
+      await fs.writeFile(INDEX_FILE, bodyText, 'utf8');
+      sendJson(res, 200, { message: 'HTML saved successfully' });
       return;
     }
 
