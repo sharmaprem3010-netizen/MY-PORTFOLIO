@@ -1,9 +1,46 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { User, GraduationCap, Code2, Rocket, Brain, CheckCircle2, MapPin, Building2 } from 'lucide-react';
-import { personalInfo } from '../data/portfolioData';
+import { User, GraduationCap, Code2, Rocket, Brain, CheckCircle2, MapPin, Building2, Plus, Trash2 } from 'lucide-react';
+import { usePortfolio } from '../src/context/PortfolioContext';
+import { EditableText } from './EditableText';
 
 export const About: React.FC = () => {
+  const { data, updateData, isEditing } = usePortfolio();
+  const { personalInfo } = data;
+
+  const addAboutBullet = () => {
+    const bullets = personalInfo.aboutBullets || [
+      "Focused on writing clean, readable, and structured code.",
+      "Self-motivated student eager to solve real-world technical problems.",
+      "Continuously improving technical knowledge through hands-on development."
+    ];
+    updateData('personalInfo.aboutBullets', [...bullets, "New Focus Area"]);
+  };
+
+  const removeAboutBullet = (idxToRemove: number) => {
+    const bullets = personalInfo.aboutBullets || [
+      "Focused on writing clean, readable, and structured code.",
+      "Self-motivated student eager to solve real-world technical problems.",
+      "Continuously improving technical knowledge through hands-on development."
+    ];
+    updateData('personalInfo.aboutBullets', bullets.filter((_, idx) => idx !== idxToRemove));
+  };
+
+  const addAboutHighlight = () => {
+    const highlightsData = personalInfo.aboutHighlights || highlights;
+    const newHighlight = {
+      icon: "Rocket",
+      title: "New Highlight",
+      description: "Description of your new highlight."
+    };
+    updateData('personalInfo.aboutHighlights', [...highlightsData, newHighlight]);
+  };
+
+  const removeAboutHighlight = (idxToRemove: number) => {
+    const highlightsData = personalInfo.aboutHighlights || highlights;
+    updateData('personalInfo.aboutHighlights', highlightsData.filter((_, idx) => idx !== idxToRemove));
+  };
+
   const highlights = [
     {
       icon: GraduationCap,
@@ -38,10 +75,18 @@ export const About: React.FC = () => {
             <span>About Me</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-100 tracking-tight">
-            Aspiring Software Developer & BCA Student
+            <EditableText 
+              value={personalInfo.title}
+              onChange={(val) => updateData('personalInfo.title', val)}
+            />
           </h2>
           <p className="text-slate-400 text-sm sm:text-base">
-            Dedicated to continuous learning, building real projects, and mastering software fundamentals.
+            <EditableText 
+              value={personalInfo.tagline}
+              onChange={(val) => updateData('personalInfo.tagline', val)}
+              multiline
+              className="w-full"
+            />
           </p>
         </div>
 
@@ -59,41 +104,77 @@ export const About: React.FC = () => {
             <div className="space-y-5">
               <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800/80">
                 <div>
-                  <h3 className="text-2xl font-bold text-slate-100">{personalInfo.name}</h3>
-                  <p className="text-cyan-400 font-medium text-sm mt-0.5">{personalInfo.title}</p>
+                  <h3 className="text-2xl font-bold text-slate-100">
+                    <EditableText 
+                      value={personalInfo.name}
+                      onChange={(val) => updateData('personalInfo.name', val)}
+                    />
+                  </h3>
+                  <p className="text-cyan-400 font-medium text-sm mt-0.5">
+                    <EditableText 
+                      value={personalInfo.title}
+                      onChange={(val) => updateData('personalInfo.title', val)}
+                    />
+                  </p>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
                   <Building2 className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>Swami Vivekananda University</span>
+                  <span>
+                    <EditableText 
+                      value={personalInfo.education}
+                      onChange={(val) => updateData('personalInfo.education', val)}
+                    />
+                  </span>
                 </div>
               </div>
 
-              <div className="space-y-4 text-slate-300 text-sm sm:text-base leading-relaxed">
-                <p>
-                  I am a 1st Semester Bachelor of Computer Applications (BCA) student at <strong className="text-slate-100">Swami Vivekananda University</strong>. My goal is to become a highly skilled software developer by establishing strong roots in programming, web architecture, and algorithmic logic.
-                </p>
-                <p>
-                  Currently, I am actively honing my skills in <strong className="text-cyan-300">C, C++, Python, and JavaScript</strong> alongside web technologies (HTML5, CSS3, Responsive Design). I spend time solving coding problems and understanding Data Structures and Algorithms (DSA) step by step.
-                </p>
-                <p>
-                  Rather than just learning theory, I actively build real projects like <strong className="text-indigo-300">FitMadix</strong> and responsive portfolio tools using modern developer workflows like Git and VS Code.
-                </p>
+              <div className="space-y-4 text-slate-300 text-sm sm:text-base leading-relaxed flex flex-col gap-2">
+                {personalInfo.aboutDetailed.map((paragraph, idx) => (
+                  <EditableText 
+                    key={idx}
+                    value={paragraph}
+                    onChange={(val) => updateData(`personalInfo.aboutDetailed.${idx}`, val)}
+                    multiline
+                    element="p"
+                    className="w-full"
+                  />
+                ))}
               </div>
 
               {/* Key Bullet Statements */}
-              <div className="pt-2 space-y-2">
-                <div className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-300">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
-                  <span>Focused on writing clean, readable, and structured code.</span>
-                </div>
-                <div className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-300">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
-                  <span>Self-motivated student eager to solve real-world technical problems.</span>
-                </div>
-                <div className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-300">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
-                  <span>Continuously improving technical knowledge through hands-on development.</span>
-                </div>
+              <div className="pt-2 space-y-2 relative">
+                {(personalInfo.aboutBullets || [
+                  "Focused on writing clean, readable, and structured code.",
+                  "Self-motivated student eager to solve real-world technical problems.",
+                  "Continuously improving technical knowledge through hands-on development."
+                ]).map((bullet, idx) => (
+                  <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-300 relative group">
+                    <CheckCircle2 className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
+                    <span className="w-full">
+                      <EditableText 
+                        value={bullet} 
+                        onChange={(val) => updateData(`personalInfo.aboutBullets.${idx}`, val)} 
+                        multiline
+                      />
+                    </span>
+                    {isEditing && (
+                      <button
+                        onClick={() => removeAboutBullet(idx)}
+                        className="opacity-0 group-hover:opacity-100 p-0.5 text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded transition-all absolute right-0 top-0"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+                {isEditing && (
+                  <button
+                    onClick={addAboutBullet}
+                    className="mt-2 px-2 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20 text-xs font-medium flex items-center gap-1 transition-all"
+                  >
+                    <Plus className="w-3.5 h-3.5" /> Add Focus Area
+                  </button>
+                )}
               </div>
             </div>
 
@@ -101,41 +182,79 @@ export const About: React.FC = () => {
             <div className="mt-8 pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-xs text-slate-400 gap-2">
               <span className="flex items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5 text-rose-400" />
-                West Bengal, India
+                <EditableText 
+                  value={personalInfo.location}
+                  onChange={(val) => updateData('personalInfo.location', val)}
+                />
               </span>
-              <span className="text-cyan-400 font-mono">Status: BCA 1st Sem Student</span>
+              <span className="text-cyan-400 font-mono">Status: <EditableText value={personalInfo.semester} onChange={(val) => updateData('personalInfo.semester', val)} /></span>
             </div>
           </motion.div>
 
           {/* Highlights Grid */}
-          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
-            {highlights.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  className="bg-[#0E131F] rounded-xl p-5 border border-slate-800/90 hover:border-cyan-500/40 transition-all duration-300 group shadow-md"
+          <div className="lg:col-span-5 relative">
+            {isEditing && (
+              <div className="flex justify-end mb-4">
+                <button
+                  onClick={addAboutHighlight}
+                  className="px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 text-xs font-semibold flex items-center gap-1.5 transition-all"
                 >
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform shrink-0">
-                      <Icon className="w-5 h-5" />
+                  <Plus className="w-4 h-4" /> Add Highlight
+                </button>
+              </div>
+            )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+              {(personalInfo.aboutHighlights || highlights).map((item, index) => {
+                const iconMap: Record<string, React.FC<any>> = {
+                  GraduationCap,
+                  Code2,
+                  Brain,
+                  Rocket
+                };
+                const Icon = typeof item.icon === 'string' ? (iconMap[item.icon] || GraduationCap) : item.icon;
+                
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    className="bg-[#0E131F] rounded-xl p-5 border border-slate-800/90 hover:border-cyan-500/40 transition-all duration-300 group shadow-md relative"
+                  >
+                    {isEditing && (
+                      <button
+                        onClick={() => removeAboutHighlight(index)}
+                        className="absolute top-2 right-2 p-1.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 rounded-md transition-colors z-10"
+                        title="Remove Highlight"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform shrink-0">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <div className="w-full pr-6">
+                        <h4 className="text-base font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">
+                          <EditableText 
+                            value={item.title} 
+                            onChange={(val) => updateData(`personalInfo.aboutHighlights.${index}.title`, val)} 
+                          />
+                        </h4>
+                        <div className="text-xs text-slate-400 leading-relaxed mt-1">
+                          <EditableText 
+                            value={item.description} 
+                            onChange={(val) => updateData(`personalInfo.aboutHighlights.${index}.description`, val)} 
+                            multiline
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="text-base font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">
-                        {item.title}
-                      </h4>
-                      <p className="text-xs text-slate-400 leading-relaxed mt-1">
-                        {item.description}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
 
         </div>

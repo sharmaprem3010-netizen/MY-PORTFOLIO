@@ -1,9 +1,31 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { GraduationCap, Calendar, BookOpen, Building2, CheckCircle2 } from 'lucide-react';
-import { educationData } from '../data/portfolioData';
+import { GraduationCap, Calendar, BookOpen, Building2, CheckCircle2, Trash2, Plus } from 'lucide-react';
+import { usePortfolio } from '../src/context/PortfolioContext';
+import { EditableText } from './EditableText';
 
 export const Education: React.FC = () => {
+  const { data, updateData, isEditing } = usePortfolio();
+
+  const handleAddEducation = () => {
+    const newEdu = {
+      id: Date.now().toString(),
+      degree: 'New Degree',
+      institution: 'Institution Name',
+      period: 'YYYY - YYYY',
+      status: 'Status',
+      description: 'Description here',
+      highlights: ['Highlight 1', 'Highlight 2']
+    };
+    updateData('education', [...data.education, newEdu]);
+  };
+
+  const handleRemoveEducation = (index: number) => {
+    const newData = [...data.education];
+    newData.splice(index, 1);
+    updateData('education', newData);
+  };
+
   return (
     <section id="education" className="py-24 bg-[#080B11] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -20,11 +42,20 @@ export const Education: React.FC = () => {
           <p className="text-slate-400 text-sm sm:text-base">
             Formal computer applications degree and academic foundations.
           </p>
+          
+          {isEditing && (
+            <button
+              onClick={handleAddEducation}
+              className="mt-4 mx-auto px-4 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30 rounded-lg flex items-center gap-2 transition-all"
+            >
+              <Plus className="w-4 h-4" /> Add Education
+            </button>
+          )}
         </div>
 
         {/* Timeline Container */}
         <div className="max-w-4xl mx-auto relative pl-6 sm:pl-8 border-l-2 border-slate-800 space-y-12">
-          {educationData.map((edu, index) => (
+          {data.education.map((edu, index) => (
             <motion.div
               key={edu.id}
               initial={{ opacity: 0, x: -20 }}
@@ -39,30 +70,43 @@ export const Education: React.FC = () => {
               </div>
 
               {/* Education Card */}
-              <div className="bg-[#0D121F] rounded-2xl p-6 sm:p-8 border border-slate-800 hover:border-cyan-500/40 transition-all duration-300 shadow-xl space-y-4">
+              <div className="bg-[#0D121F] rounded-2xl p-6 sm:p-8 border border-slate-800 hover:border-cyan-500/40 transition-all duration-300 shadow-xl space-y-4 relative">
+                {isEditing && (
+                  <button 
+                    onClick={() => handleRemoveEducation(index)}
+                    className="absolute top-4 right-4 p-2 bg-red-500/20 hover:bg-red-500/50 text-red-400 hover:text-white rounded-lg transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                )}
+                
                 <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800/80">
-                  <div>
+                  <div className="pr-12">
                     <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[11px] font-semibold">
-                      {edu.status}
+                      <EditableText value={edu.status} onChange={(val) => updateData(`education.${index}.status`, val)} />
                     </span>
                     <h3 className="text-xl sm:text-2xl font-bold text-slate-100 mt-2">
-                      {edu.degree}
+                      <EditableText value={edu.degree} onChange={(val) => updateData(`education.${index}.degree`, val)} />
                     </h3>
                   </div>
 
                   <div className="flex items-center gap-2 text-xs font-mono text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
                     <Calendar className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>{edu.period}</span>
+                    <span>
+                      <EditableText value={edu.period} onChange={(val) => updateData(`education.${index}.period`, val)} />
+                    </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 text-sm font-semibold text-slate-300">
                   <Building2 className="w-4 h-4 text-indigo-400" />
-                  <span>{edu.institution}</span>
+                  <span>
+                    <EditableText value={edu.institution} onChange={(val) => updateData(`education.${index}.institution`, val)} />
+                  </span>
                 </div>
 
                 <p className="text-slate-300 text-sm leading-relaxed">
-                  {edu.description}
+                  <EditableText value={edu.description} onChange={(val) => updateData(`education.${index}.description`, val)} multiline />
                 </p>
 
                 {/* Academic Focus Highlights */}
@@ -75,7 +119,9 @@ export const Education: React.FC = () => {
                     {edu.highlights.map((item, hIdx) => (
                       <div key={hIdx} className="flex items-start gap-2 text-xs text-slate-300">
                         <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 mt-0.5 shrink-0" />
-                        <span>{item}</span>
+                        <span>
+                          <EditableText value={item} onChange={(val) => updateData(`education.${index}.highlights.${hIdx}`, val)} />
+                        </span>
                       </div>
                     ))}
                   </div>

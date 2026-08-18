@@ -1,0 +1,22 @@
+{
+  "hero": {
+    "greeting": "Hi, I'm",
+    "name": "Prem Sharma",
+    "title": "BCA Student & Aspiring Software Developer",
+    "subtitle": "Web Developer",
+    "description": "I am a 1st Semester Computer Applications student passionate about programming, web development, problem solving, and building real‑world projects. I am dedicated to mastering C, C++, Python, JavaScript, and Data Structures & Algorithms."
+  },
+  "about": {
+    "sectionHeader": "About Me",
+    "title": "Aspiring Software Developer & BCA Student",
+    "description": "Dedicated to continuous learning, building real projects, and mastering software fundamentals.",
+    "highlights": [
+      {"title": "BCA Undergraduate", "description": "1st Semester student at Swami Vivekananda University, building theoretical & practical CS foundations.", "icon": "GraduationCap"},
+      {"title": "Active Developer", "description": "Writing code in C, C++, Python, and JavaScript while developing interactive web applications.", "icon": "Code2"},
+      {"title": "Problem Solver", "description": "Focusing on Data Structures & Algorithms (DSA) to write clean, time‑efficient code.", "icon": "Brain"},
+      {"title": "Practical Builder", "description": "Turning classroom concepts into live software projects like FitMadix and personal portfolio tools.", "icon": "Rocket"}
+    ],
+    "location": "West Bengal, India",
+    "status": "BCA 1st Sem Student"
+  }
+}

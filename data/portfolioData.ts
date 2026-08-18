@@ -18,6 +18,43 @@ export const initialPersonalInfo: PersonalInfo = {
   github: "https://github.com/sharmaprem3010-netizen",
   linkedin: "https://linkedin.com/in/prem-sharma-bca",
   resumePath: "/resume.pdf",
+  heroHighlights: [
+    "C / C++ & Python",
+    "Web Dev (HTML/CSS/JS)",
+    "Data Structures & Algorithms"
+  ],
+  heroButtons: [
+    "View My Projects",
+    "Contact Me",
+    "Resume"
+  ],
+  aboutBullets: [
+    "Focused on writing clean, readable, and structured code.",
+    "Self-motivated student eager to solve real-world technical problems.",
+    "Continuously improving technical knowledge through hands-on development."
+  ],
+  aboutHighlights: [
+    {
+      icon: "GraduationCap",
+      title: "BCA Undergraduate",
+      description: "1st Semester student at Swami Vivekananda University, building theoretical & practical CS foundations."
+    },
+    {
+      icon: "Code2",
+      title: "Active Developer",
+      description: "Writing code in C, C++, Python, and JavaScript while developing interactive web applications."
+    },
+    {
+      icon: "Brain",
+      title: "Problem Solver",
+      description: "Focusing on Data Structures & Algorithms (DSA) to write clean, time-efficient code."
+    },
+    {
+      icon: "Rocket",
+      title: "Practical Builder",
+      description: "Turning classroom concepts into live software projects like FitMadix and personal portfolio tools."
+    }
+  ]
 };
 
 export const initialSkillsData: SkillItem[] = [

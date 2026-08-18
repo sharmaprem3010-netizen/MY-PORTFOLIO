@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Mail, Github, Linkedin, Send, CheckCircle2, MessageSquare, MapPin, User, ArrowUpRight } from 'lucide-react';
-import { personalInfo } from '../data/portfolioData';
+import { usePortfolio } from '../src/context/PortfolioContext';
+import { EditableText } from './EditableText';
 
 export const Contact: React.FC = () => {
+  const { data, updateData } = usePortfolio();
+  const { personalInfo } = data;
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -56,15 +60,21 @@ export const Contact: React.FC = () => {
           >
             <div className="bg-[#0D121F] rounded-2xl p-6 sm:p-8 border border-slate-800 space-y-6 shadow-xl">
               <h3 className="text-xl font-bold text-slate-100">Let's Connect</h3>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                I am actively seeking software development projects, technical study discussions, open-source collaborations, and future internship opportunities.
-              </p>
+              <div className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                <EditableText value="I am actively seeking software development projects, technical study discussions, open-source collaborations, and future internship opportunities." onChange={() => {}} multiline />
+              </div>
 
               {/* Direct Links */}
               <div className="space-y-4 pt-2">
                 <a
                   href={`mailto:${personalInfo.email}`}
                   className="flex items-center gap-4 p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-800/80 transition-all group"
+                  onClick={(e) => {
+                     // Prevent click if clicking inside an editable text area
+                     if ((e.target as HTMLElement).tagName === 'INPUT' || (e.target as HTMLElement).tagName === 'TEXTAREA') {
+                       e.preventDefault();
+                     }
+                  }}
                 >
                   <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
                     <Mail className="w-5 h-5" />
@@ -72,7 +82,7 @@ export const Contact: React.FC = () => {
                   <div className="flex-1 min-w-0">
                     <span className="text-[11px] font-mono text-slate-400 block">Email Address</span>
                     <span className="text-xs sm:text-sm font-bold text-slate-200 truncate block group-hover:text-cyan-300">
-                      {personalInfo.email}
+                      <EditableText value={personalInfo.email} onChange={(val) => updateData('personalInfo.email', val)} />
                     </span>
                   </div>
                   <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400" />
@@ -83,6 +93,11 @@ export const Contact: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-4 p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-800/80 transition-all group"
+                  onClick={(e) => {
+                     if ((e.target as HTMLElement).tagName === 'INPUT' || (e.target as HTMLElement).tagName === 'TEXTAREA') {
+                       e.preventDefault();
+                     }
+                  }}
                 >
                   <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
                     <Github className="w-5 h-5" />
@@ -90,7 +105,7 @@ export const Contact: React.FC = () => {
                   <div className="flex-1 min-w-0">
                     <span className="text-[11px] font-mono text-slate-400 block">GitHub Profile</span>
                     <span className="text-xs sm:text-sm font-bold text-slate-200 truncate block group-hover:text-cyan-300">
-                      github.com/sharmaprem3010-netizen
+                      <EditableText value={personalInfo.github} onChange={(val) => updateData('personalInfo.github', val)} />
                     </span>
                   </div>
                   <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400" />
@@ -101,6 +116,11 @@ export const Contact: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-4 p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-800/80 transition-all group"
+                  onClick={(e) => {
+                     if ((e.target as HTMLElement).tagName === 'INPUT' || (e.target as HTMLElement).tagName === 'TEXTAREA') {
+                       e.preventDefault();
+                     }
+                  }}
                 >
                   <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
                     <Linkedin className="w-5 h-5" />
@@ -108,7 +128,7 @@ export const Contact: React.FC = () => {
                   <div className="flex-1 min-w-0">
                     <span className="text-[11px] font-mono text-slate-400 block">LinkedIn Profile</span>
                     <span className="text-xs sm:text-sm font-bold text-slate-200 truncate block group-hover:text-cyan-300">
-                      linkedin.com/in/prem-sharma-bca
+                      <EditableText value={personalInfo.linkedin} onChange={(val) => updateData('personalInfo.linkedin', val)} />
                     </span>
                   </div>
                   <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400" />
@@ -116,8 +136,10 @@ export const Contact: React.FC = () => {
               </div>
 
               <div className="pt-2 text-xs text-slate-400 flex items-center gap-2 font-mono">
-                <MapPin className="w-4 h-4 text-rose-400" />
-                <span>Swami Vivekananda University, West Bengal</span>
+                <MapPin className="w-4 h-4 text-rose-400 shrink-0" />
+                <span>
+                  <EditableText value={personalInfo.location} onChange={(val) => updateData('personalInfo.location', val)} />
+                </span>
               </div>
             </div>
           </motion.div>

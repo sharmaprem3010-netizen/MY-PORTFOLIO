@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { FolderGit2, Plus, Sparkles, Filter } from 'lucide-react';
-import { projectsData as initialProjects } from '../data/portfolioData';
+import { usePortfolio } from '../src/context/PortfolioContext';
 import { Project } from '../types';
 import { ProjectCard } from './ProjectCard';
 import { ProjectModal } from './ProjectModal';
 import { AddProjectModal } from './AddProjectModal';
 
 export const Projects: React.FC = () => {
-  const [projects, setProjects] = useState<Project[]>(initialProjects);
+  const { data, updateData, isEditing } = usePortfolio();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<'All' | 'Web App' | 'Frontend'>('All');
 
-  const filteredProjects = projects.filter((project) => {
+  const filteredProjects = data.projects.filter((project) => {
     if (activeFilter === 'All') return true;
     return project.category === activeFilter;
   });
 
   const handleAddProject = (newProj: Project) => {
-    setProjects((prev) => [newProj, ...prev]);
+    updateData('projects', [newProj, ...data.projects]);
   };
 
   return (
@@ -59,26 +59,32 @@ export const Projects: React.FC = () => {
               ))}
             </div>
 
-            <button
-              onClick={() => setIsAddModalOpen(true)}
-              className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 hover:border-cyan-400 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
-              title="Add extra project"
-            >
-              <Plus className="w-4 h-4 text-cyan-400" />
-              <span>Add Project</span>
-            </button>
+            {isEditing && (
+              <button
+                onClick={() => setIsAddModalOpen(true)}
+                className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 hover:border-cyan-400 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm"
+                title="Add extra project"
+              >
+                <Plus className="w-4 h-4 text-cyan-400" />
+                <span>Add Project</span>
+              </button>
+            )}
           </div>
         </div>
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-          {filteredProjects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onSelectProject={setSelectedProject}
-            />
-          ))}
+          {filteredProjects.map((project) => {
+            const originalIndex = data.projects.findIndex(p => p.id === project.id);
+            return (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                originalIndex={originalIndex}
+                onSelectProject={setSelectedProject}
+              />
+            );
+          })}
         </div>
 
         {/* Modals */}

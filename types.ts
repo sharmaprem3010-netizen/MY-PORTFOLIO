@@ -70,6 +70,12 @@ export interface ContactMessage {
   read: boolean;
 }
 
+export interface AboutHighlight {
+  icon: string;
+  title: string;
+  description: string;
+}
+
 export interface PersonalInfo {
   name: string;
   title: string;
@@ -85,6 +91,10 @@ export interface PersonalInfo {
   linkedin: string;
   resumePath: string;
   phone?: string;
+  heroHighlights?: string[];
+  heroButtons?: string[];
+  aboutBullets?: string[];
+  aboutHighlights?: AboutHighlight[];
 }
 
 export interface PortfolioData {
