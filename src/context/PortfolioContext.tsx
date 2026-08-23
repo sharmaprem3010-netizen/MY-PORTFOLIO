@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { PortfolioData } from '../../types';
-import contentJson from '../content.json';
-
-const defaultPortfolioData = contentJson as unknown as PortfolioData;
+import { defaultPortfolioData } from '../../data/portfolioData';
 
 interface PortfolioContextType {
   data: PortfolioData;
@@ -46,7 +44,15 @@ export const PortfolioProvider: React.FC<{ children: ReactNode }> = ({ children 
       const stored = localStorage.getItem(storageKey);
       if (stored) {
         try {
-          return JSON.parse(stored) as PortfolioData;
+          const parsed = JSON.parse(stored) as Partial<PortfolioData>;
+          return {
+            ...defaultPortfolioData,
+            ...parsed,
+            personalInfo: {
+              ...defaultPortfolioData.personalInfo,
+              ...(parsed.personalInfo ?? {}),
+            },
+          };
         } catch (e) {
           console.error("Failed to parse portfolio data from local storage");
         }
