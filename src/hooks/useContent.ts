@@ -42,7 +42,7 @@ export function useContent() {
         }
       }
     }
-    return contentData as Content;
+    return contentData as unknown as Content;
   });
 
   // Persist to localStorage whenever content changes

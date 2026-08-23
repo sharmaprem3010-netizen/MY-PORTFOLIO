@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { PortfolioData } from '../../types';
-import { defaultPortfolioData } from '../../data/portfolioData';
+import contentJson from '../content.json';
+
+const defaultPortfolioData = contentJson as unknown as PortfolioData;
 
 interface PortfolioContextType {
   data: PortfolioData;

@@ -6,7 +6,7 @@ interface EditableTextProps {
   onChange: (newValue: string) => void;
   multiline?: boolean;
   className?: string;
-  element?: keyof JSX.IntrinsicElements;
+  element?: keyof React.JSX.IntrinsicElements;
   placeholder?: string;
 }
 
