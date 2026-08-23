@@ -6,7 +6,7 @@ import fs from 'fs';
 
 export default defineConfig(() => {
   return {
-    base: '/MY-PORTFOLIO/',
+    base: '/',
     plugins: [
       react(),
       tailwindcss(),
