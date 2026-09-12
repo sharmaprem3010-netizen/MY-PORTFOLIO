@@ -46,6 +46,27 @@ export default function Navigation({ progress, onNavigate, onOpenRecruiter }: Na
               {label}
             </button>
           ))}
+          <a
+            href="/Prem-Sharma-Resume-ATS.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            download="Prem-Sharma-Resume-ATS.pdf"
+            style={{
+              display: 'flex',
+              gap: '4px',
+              font: "500 9px 'JetBrains Mono Variable', monospace",
+              letterSpacing: '.13em',
+              color: 'var(--crimson)',
+              textDecoration: 'none',
+              alignItems: 'center',
+              padding: '2px 6px',
+              border: '1px solid rgba(229,57,53,0.3)',
+              borderRadius: '4px',
+            }}
+            data-testid="navigation-resume-link"
+          >
+            RESUME ↓
+          </a>
         </div>
 
         <button

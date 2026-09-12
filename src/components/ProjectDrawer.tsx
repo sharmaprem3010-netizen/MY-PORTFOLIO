@@ -61,26 +61,41 @@ export default function ProjectDrawer({ project, onClose }: ProjectDrawerProps) 
             STATUS<strong>{project.status}</strong>
           </span>
         </div>
+        {project.highlights && project.highlights.length > 0 && (
+          <div className="drawer-highlights" style={{ marginTop: '24px', borderTop: '1px solid var(--line)', paddingTop: '20px' }}>
+            <span style={{ color: '#777', font: "9px 'JetBrains Mono Variable', monospace", letterSpacing: '0.12em', display: 'block', marginBottom: '12px' }}>
+              KEY HIGHLIGHTS & DELIVERABLES
+            </span>
+            <ul style={{ listStyleType: 'disc', paddingLeft: '20px', margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {project.highlights.map((highlight, idx) => (
+                <li key={idx} style={{ fontSize: '0.875rem', lineHeight: '1.5', opacity: 0.9 }}>
+                  {highlight}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         <div className="drawer-links">
-          <a
-            href={project.liveUrl || '#'}
-            onClick={(e) => {
-              if (!project.liveUrl) e.preventDefault();
-            }}
-            target={project.liveUrl ? '_blank' : undefined}
-            rel="noreferrer"
-            data-testid="project-live-link"
-          >
-            LIVE WEBSITE ↗
-          </a>
-          <a
-            href={project.githubUrl || 'https://github.com'}
-            target="_blank"
-            rel="noreferrer"
-            data-testid="project-source-link"
-          >
-            SOURCE CODE ↗
-          </a>
+          {project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="project-live-link"
+            >
+              LIVE WEBSITE ↗
+            </a>
+          )}
+          {project.githubUrl && (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="project-source-link"
+            >
+              SOURCE CODE ↗
+            </a>
+          )}
         </div>
       </aside>
     </div>

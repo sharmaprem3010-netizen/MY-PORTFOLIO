@@ -10,6 +10,21 @@ export interface Project {
   liveUrl?: string;
   githubUrl?: string;
   overview?: string;
+  highlights?: string[];
+}
+
+export interface EducationItem {
+  degree: string;
+  institution: string;
+  period: string;
+  grade: string;
+  field?: string;
+}
+
+export interface CertificationItem {
+  name: string;
+  issuer: string;
+  year: string;
 }
 
 export interface ProcessStep {
@@ -23,3 +38,4 @@ export interface CursorState {
   y: number;
   label: string;
 }
+

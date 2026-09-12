@@ -6,7 +6,7 @@ import ProjectCard from './components/ProjectCard';
 import ProjectDrawer from './components/ProjectDrawer';
 import SkillPopover from './components/SkillPopover';
 import RecruiterView from './components/RecruiterView';
-import { art, projects, skills, exploring, rules, processSteps } from './data/portfolioData';
+import { art, projects, skills, exploring, rules, processSteps, personalInfo } from './data/portfolioData';
 import { Project } from './types';
 
 export default function App() {
@@ -57,8 +57,8 @@ export default function App() {
         {/* HERO SECTION */}
         <section id="top" className="hero-section" data-testid="hero-section">
           <div className="hero-kicker">
-            <span>SOFTWARE DEVELOPER</span>
-            <span>NEW DELHI / 2026</span>
+            <span>AI & FULL-STACK DEVELOPER</span>
+            <span>{personalInfo.location.toUpperCase()} / 2026</span>
           </div>
           <div className="hero-art-wrap">
             <div className="hero-art-frame">
@@ -85,15 +85,35 @@ export default function App() {
             <p>
               PREM SHARMA
               <br />
-              <span>BUILDER / AI EXPLORER / CURIOUS HUMAN</span>
+              <span>AI DEVELOPER / FULL-STACK BUILDER / BCA STUDENT</span>
             </p>
-            <button
-              type="button"
-              onClick={() => jumpTo('about')}
-              data-testid="hero-scroll-button"
-            >
-              SCROLL TO ENTER ↓
-            </button>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+              <a
+                href={personalInfo.resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                download="Prem-Sharma-Resume-ATS.pdf"
+                style={{
+                  padding: '8px 14px',
+                  background: 'var(--crimson)',
+                  color: 'var(--paper)',
+                  font: "500 10px 'JetBrains Mono Variable', monospace",
+                  textDecoration: 'none',
+                  borderRadius: '2px',
+                  letterSpacing: '0.1em',
+                }}
+                data-testid="hero-resume-download-button"
+              >
+                RESUME (PDF) ↓
+              </a>
+              <button
+                type="button"
+                onClick={() => jumpTo('about')}
+                data-testid="hero-scroll-button"
+              >
+                SCROLL TO ENTER ↓
+              </button>
+            </div>
           </div>
         </section>
 
@@ -115,7 +135,7 @@ export default function App() {
                 <span>BUILDING.</span>
               </h2>
               <p className="serif-intro">
-                I’m Prem — a BCA student learning in public, making useful things, and following the questions that lead from software into AI.
+                I’m Prem — a second-year BCA (Computer Science) student at Swami Vivekananda University (CGPA 8.5/10), building production web applications and conversational AI systems with Python, Next.js, and modern tools.
               </p>
             </div>
             <div className="portrait-stack">
@@ -403,26 +423,36 @@ export default function App() {
             </h2>
             <div className="contact-links">
               <a
-                href="mailto:sharmaprem3010@gmail.com"
+                href={`mailto:${personalInfo.email}`}
                 data-testid="contact-email-link"
               >
                 EMAIL ↗
               </a>
               <a
-                href="https://github.com"
+                href={personalInfo.github}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 data-testid="contact-github-link"
               >
                 GITHUB ↗
               </a>
               <a
-                href="https://www.linkedin.com"
+                href={personalInfo.linkedin}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 data-testid="contact-linkedin-link"
               >
                 LINKEDIN ↗
+              </a>
+              <a
+                href={personalInfo.resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                download="Prem-Sharma-Resume-ATS.pdf"
+                style={{ color: 'var(--crimson)', fontWeight: 600 }}
+                data-testid="contact-resume-link"
+              >
+                ATS RESUME ↓
               </a>
               <button
                 type="button"
@@ -434,7 +464,7 @@ export default function App() {
             </div>
           </div>
           <div className="contact-footer">
-            <span>PREM SHARMA / SOFTWARE DEVELOPER IN PROGRESS / 2026</span>
+            <span>PREM SHARMA / AI & FULL-STACK DEVELOPER / KOLKATA, INDIA / 2026</span>
             <span>TO BE CONTINUED →</span>
             <span>NEXT EPISODE → UNKNOWN</span>
           </div>

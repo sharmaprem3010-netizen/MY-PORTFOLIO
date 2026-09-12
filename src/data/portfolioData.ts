@@ -1,4 +1,4 @@
-import { Project, ProcessStep } from '../types';
+import { Project, ProcessStep, EducationItem, CertificationItem } from '../types';
 
 export const art = {
   desk: '/images/desk.jpeg',
@@ -12,92 +12,199 @@ export const art = {
     'https://static.prod-images.emergentagent.com/jobs/339fe535-93a8-4ac0-8da7-d5a94714170f/images/3a0c029a6ec43f87f0ac8a147fea0288e7b13e3eb33981d1e6d4e26b54276e1c.jpeg',
 };
 
+export const personalInfo = {
+  name: 'Prem Sharma',
+  role: 'AI & Full-Stack Developer | BCA Student',
+  email: 'sharmaprem3010@gmail.com',
+  phone: '+91 74397 02927',
+  location: 'Kolkata, West Bengal, India',
+  linkedin: 'https://www.linkedin.com/in/premsharmatech',
+  github: 'https://github.com/sharmaprem3010-netizen',
+  portfolio: 'https://sharmaprem3010-netizen.github.io/MY-PORTFOLIO',
+  resumeUrl: '/Prem-Sharma-Resume-ATS.pdf',
+  summary:
+    'Second-year BCA (Computer Science) student with hands-on experience building and deploying full-stack web applications and AI-integrated tools using Python, HTML5, CSS, and JavaScript. Delivered 3+ production-deployed projects spanning conversational AI, e-commerce, and responsive web design. Strong foundation in Data Structures and Algorithms and Git/GitHub workflows. Seeking an AI Engineering or Full-Stack Developer role to apply technical and problem-solving skills in real-world software systems.',
+};
+
 export const projects: Project[] = [
   {
     number: '01',
-    name: 'FitMadix',
-    type: 'AI HEALTH COMPANION',
-    status: 'ACTIVE',
-    statement: 'DESIGNED TO MAKE HEALTH TECHNOLOGY FEEL HUMAN.',
+    name: 'Fitmadix',
+    type: 'AI DOCTOR ASSISTANT / HEALTHCARE',
+    status: 'PRODUCTION',
+    statement: 'CONVERSATIONAL SYMPTOM ANALYSIS POWERED BY GEMINI API.',
     image: art.desk,
     fallbackImage: art.deskFallback,
-    tags: ['React', 'AI', 'Product'],
+    tags: ['Next.js', 'Tailwind CSS', 'Gemini API', 'AI', 'Vercel'],
+    liveUrl: 'https://fitmadix-app.vercel.app',
+    githubUrl: 'https://github.com/sharmaprem3010-netizen',
     overview:
-      'FitMadix bridges the gap between mechanical biometric tracking and thoughtful human coaching. Powered by contextual intelligence that adapts to daily habits without intrusive noise.',
+      'An intelligent conversational healthcare assistant built using the Gemini API and prompt engineering to deliver symptom analysis, tested to handle 50+ concurrent user queries with sub-second page loads and secure authentication.',
+    highlights: [
+      'Built an AI-powered healthcare assistant using the Gemini API and prompt engineering to deliver conversational symptom analysis, tested to handle 50+ concurrent user queries.',
+      'Developed a responsive front-end with Next.js and Tailwind CSS, achieving a 95+ Lighthouse performance score and sub-second page load times.',
+      'Implemented secure user authentication with encrypted consultation history storage for all registered profiles.',
+      'Managed CI/CD deployment pipelines via Vercel, cutting deployment time by 20% versus manual builds.',
+    ],
   },
   {
     number: '02',
-    name: 'Support Bot',
-    type: 'CONVERSATIONAL PRODUCT',
-    status: 'EXPLORING',
-    statement: 'A SMALLER DISTANCE BETWEEN A QUESTION AND A USEFUL ANSWER.',
+    name: 'The Baking Nest',
+    type: 'E-COMMERCE & ARTISANAL ORDERING',
+    status: 'LIVE',
+    statement: 'HANDCRAFTED HOMEMADE CAKES, BAKED FRESH TO ORDER.',
     image: art.lab,
     fallbackImage: art.labFallback,
-    tags: ['Python', 'LLMs', 'Automation'],
+    tags: ['React', 'Vite', 'Tailwind CSS', 'Netlify', 'WhatsApp API'],
+    liveUrl: 'https://fascinating-hotteok-1eea98.netlify.app',
+    githubUrl: 'https://github.com/sharmaprem3010-netizen',
     overview:
-      'A grounded conversational agent designed to parse product documentation, resolve friction points in real time, and route ambiguous queries with transparent reasoning.',
+      'An artisanal homemade cake catalog and bakery ordering web app featuring handcrafted goods, seasonal selections, transparent pricing, and instant WhatsApp ordering with pickup coordination.',
+    highlights: [
+      'Engineered a responsive, mobile-first cake catalog with real ingredient breakdowns, flavor profiles, and allergen notes.',
+      'Integrated zero-friction WhatsApp order dispatch pre-populating item selection, pickup schedule, and custom messages.',
+      'Optimized lightweight asset delivery and buttery micro-interactions for sub-second page transitions.',
+      'Automated deployment on Netlify with continuous Git push triggers and high uptime.',
+    ],
   },
   {
     number: '03',
-    name: 'Shopora',
-    type: 'E-COMMERCE EXPERIENCE',
-    status: 'CONCEPT',
-    statement: 'SHOPPING, STRIPPED OF THE NOISE.',
+    name: 'E-Shopping Website',
+    type: 'E-COMMERCE FRONTEND',
+    status: 'PRODUCTION',
+    statement: 'DYNAMIC 50+ PRODUCT CATALOG WITH SUB-SECOND RENDERING.',
     image: art.ending,
     fallbackImage: art.endingFallback,
-    tags: ['TypeScript', 'UX', 'Web'],
+    tags: ['HTML5', 'CSS3', 'JavaScript', 'GitHub Pages', 'CI/CD'],
+    liveUrl: 'https://sharmaprem3010-netizen.github.io/E-shopping-website',
+    githubUrl: 'https://github.com/sharmaprem3010-netizen/E-shopping-website',
     overview:
-      'A minimalist e-commerce storefront experiment centered on high typographic hierarchy, lightning-fast cart interactions, and distraction-free checkout flows.',
+      'Engineered a responsive e-commerce frontend supporting a dynamic catalog of 50+ products with sub-second rendering, optimized DOM manipulation, and automated GitHub Actions CI/CD.',
+    highlights: [
+      'Engineered a responsive e-commerce frontend supporting a dynamic catalog of 50+ products with sub-second rendering.',
+      'Optimized asset loading and DOM manipulation, improving mobile performance metrics by 25% with full cross-browser compatibility.',
+      'Automated deployment with GitHub Actions CI/CD, reducing manual build time by 40%.',
+      'Maintained version control across 30+ commits, including secure repository secrets management.',
+    ],
   },
   {
     number: '04',
-    name: 'The Baking Nest',
-    type: 'BRAND + WEB EXPERIENCE',
-    status: 'CONCEPT',
-    statement: 'A WARM DIGITAL PLACE FOR THINGS MADE BY HAND.',
+    name: 'MY-PORTFOLIO',
+    type: 'EDITORIAL WEB PORTFOLIO',
+    status: 'ACTIVE',
+    statement: 'ACCESSIBLE, HIGH-PERFORMANCE CENTRALIZED SHOWCASE.',
     image: art.desk,
     fallbackImage: art.deskFallback,
-    tags: ['Design', 'Frontend', 'Story'],
+    tags: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'GitHub Pages'],
+    liveUrl: 'https://sharmaprem3010-netizen.github.io/MY-PORTFOLIO',
+    githubUrl: 'https://github.com/sharmaprem3010-netizen/MY-PORTFOLIO',
     overview:
-      'An artisanal bakery showcase capturing warmth and tactile craft through dynamic paper textures, organic layout pacing, and bespoke storytelling micro-interactions.',
-  },
-  {
-    number: '05',
-    name: 'Study House',
-    type: 'LEARNING TOOLKIT',
-    status: 'IN PROGRESS',
-    statement: 'BUILDING BETTER HABITS ONE CLEAR SCREEN AT A TIME.',
-    image: art.lab,
-    fallbackImage: art.labFallback,
-    tags: ['React', 'Systems', 'Learning'],
-    overview:
-      'A distraction-free study environment designed for students. Combines deep work intervals, active recall flashcards, and minimalist progress metrics.',
+      'A fully mobile-responsive portfolio site with an editorial anime/manga aesthetic, featuring interactive Recruiter Mode, direct ATS resume integration, and scoring 95+ on Core Web Vitals.',
+    highlights: [
+      'Built a fully mobile-responsive portfolio site with HTML5/React, CSS3, and JavaScript/TypeScript, scoring 95+ on Core Web Vitals.',
+      'Designed a centralized layout showcasing 3+ technical projects with accessibility-optimized UI components.',
+      'Integrated dual-mode viewing (Story Mode & Recruiter View) plus direct ATS Resume PDF access.',
+      'Managed version control with Git and configured a zero-downtime CI/CD pipeline via GitHub Pages.',
+    ],
   },
 ];
 
-export const skills = ['C', 'C++', 'PYTHON', 'JAVASCRIPT', 'HTML', 'CSS', 'REACT', 'GIT'];
+export const skills = [
+  'PYTHON',
+  'C++',
+  'C',
+  'JAVASCRIPT',
+  'TYPESCRIPT',
+  'HTML5',
+  'CSS3',
+  'REACT',
+  'NEXT.JS',
+  'GIT / GITHUB',
+  'DSA',
+  'ADVANCED EXCEL',
+];
 
 export const skillDescriptions: Record<string, string> = {
-  'C': 'Low-level foundations, memory management, pointer arithmetic, and algorithmic understanding.',
-  'C++': 'Object-oriented structures, STL containers, competitive problem solving, and system efficiency.',
-  'PYTHON': 'Scripting, data manipulation, automation scripts, and interfacing with machine learning models.',
-  'JAVASCRIPT': 'Modern ES6+ patterns, asynchronous promises, DOM interfaces, and frontend interactivity.',
-  'HTML': 'Semantic layouts, document hierarchy, accessibility standards, and clean structural markup.',
-  'CSS': 'Responsive architecture, custom layout systems, typographic rhythm, and motion transitions.',
-  'REACT': 'Component lifecycle, modern hooks, state synchronization, and reactive UI development.',
-  'GIT': 'Version control discipline, atomic branching, commit hygiene, and collaborative workflows.',
+  'PYTHON':
+    'Full-stack scripting, data manipulation, algorithm implementation, and interfacing with modern AI/LLM APIs.',
+  'C++':
+    'Object-oriented programming, STL algorithms & data structures, memory management, and competitive problem solving.',
+  'C':
+    'Foundational systems programming, pointer arithmetic, dynamic memory allocation, and algorithmic fundamentals.',
+  'JAVASCRIPT':
+    'Modern ES6+, asynchronous JavaScript (async/await), DOM manipulation, and building dynamic single-page web apps.',
+  'TYPESCRIPT':
+    'Strict type safety, interface contracts, scalable component architecture, and refactoring confidence.',
+  'HTML5':
+    'Semantic document structure, accessibility standards (WCAG), responsive layouts, and SEO best practices.',
+  'CSS3':
+    'Modern CSS architecture, Flexbox, CSS Grid, custom properties, responsive design, and smooth keyframe animations.',
+  'REACT':
+    'Declarative component state, React hooks, virtual DOM optimization, and component-driven web applications.',
+  'NEXT.JS':
+    'Server-side rendering, App Router architecture, API route handlers, and production-grade deployment on Vercel.',
+  'GIT / GITHUB':
+    'Atomic commits, branch management, collaborative pull requests, GitHub Actions CI/CD automation, and version control.',
+  'DSA':
+    'Core Computer Science data structures (arrays, linked lists, trees, graphs) and algorithms (searching, sorting, DP).',
+  'ADVANCED EXCEL':
+    'Certified data modeling, complex formulas (VLOOKUP, INDEX/MATCH), pivot tables, data cleaning, and reporting.',
 };
 
-export const exploring = ['AI', 'MACHINE LEARNING', 'LLMs', 'RAG', 'AUTOMATION', 'AI ENGINEERING'];
+export const exploring = [
+  'GEMINI API',
+  'CONVERSATIONAL AI',
+  'PROMPT ENGINEERING',
+  'LLMs',
+  'FULL-STACK ARCHITECTURE',
+  'CI/CD PIPELINES',
+];
 
 export const exploringDescriptions: Record<string, string> = {
-  'AI': 'Exploring neural architectures, intelligent agents, and cognitive system design.',
-  'MACHINE LEARNING': 'Studying supervised/unsupervised algorithms, evaluation metrics, and feature pipelines.',
-  'LLMs': 'Prompt engineering, token economics, context window management, and structured tool use.',
-  'RAG': 'Retrieval-Augmented Generation, vector embeddings, chunking strategies, and hybrid semantic search.',
-  'AUTOMATION': 'Agentic workflows, autonomous background task execution, and workflow optimization.',
-  'AI ENGINEERING': 'Bridging foundational models with high-reliability full-stack web software.',
+  'GEMINI API':
+    'Integrating Google Gemini multi-modal models for real-time symptom analysis and conversational AI features.',
+  'CONVERSATIONAL AI':
+    'Designing context-aware dialogue state managers, fallbacks, and user-centric conversational agents.',
+  'PROMPT ENGINEERING':
+    'Few-shot prompting, structured output enforcement (JSON schemas), system instructions, and chain-of-thought evaluation.',
+  'LLMs':
+    'Studying token economics, latency reduction, parameter-efficient fine-tuning, and retrieval-augmented systems.',
+  'FULL-STACK ARCHITECTURE':
+    'Connecting high-speed client frontends with resilient APIs, encrypted data persistence, and cloud hosting.',
+  'CI/CD PIPELINES':
+    'Automating build, test, and zero-downtime deployment pipelines with GitHub Actions, Vercel, and Netlify.',
 };
+
+export const education: EducationItem[] = [
+  {
+    degree: 'Bachelor of Computer Applications (BCA)',
+    field: 'Computer Science',
+    institution: 'Swami Vivekananda University',
+    period: '2025 – 2029',
+    grade: 'CGPA: 8.5 / 10',
+  },
+  {
+    degree: 'Higher Secondary (Class XII)',
+    field: 'Biology Science',
+    institution: 'Gustia Kshetranath High School',
+    period: '2024 – 2025',
+    grade: 'Score: 82.2%',
+  },
+];
+
+export const certifications: CertificationItem[] = [
+  {
+    name: 'Advanced Excel',
+    issuer: 'Ardent Pvt. Ltd.',
+    year: '2025',
+  },
+];
+
+export const languages = [
+  { language: 'English', proficiency: 'Fluent' },
+  { language: 'Hindi', proficiency: 'Fluent' },
+  { language: 'Bengali', proficiency: 'Fluent' },
+];
 
 export const rules = [
   'BUILD SOMETHING REAL.',
@@ -120,3 +227,4 @@ export const processSteps: ProcessStep[] = [
   { number: '07', title: 'LEARN', copy: 'Listen to what the work says back.' },
   { number: '08', title: 'REPEAT', copy: 'Keep the loop alive.' },
 ];
+
