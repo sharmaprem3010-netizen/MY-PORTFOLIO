@@ -14,6 +14,7 @@ export default function App() {
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [activeSkill, setActiveSkill] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
+  const [copiedEmail, setCopiedEmail] = useState(false);
 
   // Fallback state for main illustration artworks
   const [deskImg, setDeskImg] = useState(art.desk);
@@ -48,6 +49,14 @@ export default function App() {
 
     return () => observer.disconnect();
   }, [recruiterMode]);
+
+  const handleCopyEmail = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(personalInfo.email);
+      setCopiedEmail(true);
+      setTimeout(() => setCopiedEmail(false), 2500);
+    }
+  };
 
   const jumpTo = (id: string) => {
     if (id === 'top') {
@@ -92,6 +101,9 @@ export default function App() {
                 src={deskImg}
                 alt="Original anime illustration of Prem coding at night"
                 referrerPolicy="no-referrer"
+                fetchPriority="high"
+                width="640"
+                height="480"
                 onError={() => {
                   if (deskImg !== art.deskFallback) setDeskImg(art.deskFallback);
                 }}
@@ -164,9 +176,10 @@ export default function App() {
               <img
                 src={labImg}
                 alt="Original anime illustration of Prem in a technology lab"
-                loading="lazy"
                 decoding="async"
                 referrerPolicy="no-referrer"
+                width="640"
+                height="640"
                 onError={() => {
                   if (labImg !== art.labFallback) setLabImg(art.labFallback);
                 }}
@@ -404,9 +417,10 @@ export default function App() {
               <img
                 src={labImg}
                 alt="Original anime illustration of Prem exploring AI systems"
-                loading="lazy"
                 decoding="async"
                 referrerPolicy="no-referrer"
+                width="640"
+                height="640"
                 onError={() => {
                   if (labImg !== art.labFallback) setLabImg(art.labFallback);
                 }}
@@ -436,72 +450,167 @@ export default function App() {
 
         {/* CONTACT / END OF EPISODE */}
         <section id="contact" className="contact-section reveal-on-scroll" data-testid="contact-section">
-          <div className="contact-art animate-float">
-            <img
-              src={endingImg}
-              alt="Original anime illustration of Prem walking toward the next chapter"
-              loading="lazy"
-              decoding="async"
-              referrerPolicy="no-referrer"
-              onError={() => {
-                if (endingImg !== art.endingFallback) setEndingImg(art.endingFallback);
-              }}
-            />
-          </div>
-          <div className="contact-copy">
-            <p className="eyebrow">END OF EPISODE / FOR NOW</p>
-            <h2>
-              LET’S BUILD<br />
-              <em>SOMETHING</em><br />
-              WORTH<br />
-              REMEMBERING<span>.</span>
-            </h2>
-            <div className="contact-links">
-              <a
-                href={`mailto:${personalInfo.email}`}
-                data-testid="contact-email-link"
-              >
-                EMAIL ↗
-              </a>
-              <a
-                href={personalInfo.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="contact-github-link"
-              >
-                GITHUB ↗
-              </a>
-              <a
-                href={personalInfo.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="contact-linkedin-link"
-              >
-                LINKEDIN ↗
-              </a>
-              <a
-                href={personalInfo.resumeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                download="Prem-Sharma-Resume-ATS.pdf"
-                className="contact-resume-cta"
-                data-testid="contact-resume-link"
-              >
-                ATS RESUME (PDF) ↓
-              </a>
-              <button
-                type="button"
-                onClick={() => setRecruiterMode(true)}
-                data-testid="contact-recruiter-button"
-              >
-                RECRUITER MODE ↗
-              </button>
+          <div className="contact-container">
+            {/* Top Manga Finale Badge */}
+            <div className="contact-header-badge">
+              <span className="contact-episode-tag">EPISODE FINALE / 2026</span>
+              <div className="contact-status-chip">
+                <span className="live-pulse-dot" />
+                <span>OPEN FOR ROLES</span>
+              </div>
             </div>
-          </div>
-          <div className="contact-footer">
-            <span>PREM SHARMA / AI & FULL-STACK DEVELOPER / KOLKATA, INDIA / 2026</span>
-            <span>TO BE CONTINUED →</span>
-            <span>NEXT EPISODE → UNKNOWN</span>
+
+            <div className="contact-content-grid">
+              {/* Left Column: Heading, Narrative, Email, and Action Cards */}
+              <div className="contact-main">
+                <h2 className="contact-title">
+                  LET’S BUILD<br />
+                  <em>SOMETHING</em><br />
+                  WORTH<br />
+                  <span className="contact-outline-text">REMEMBERING.</span>
+                </h2>
+
+                <p className="contact-narrative">
+                  Always looking for challenging problems, ambitious teams, and thoughtful products at the intersection of full-stack engineering and artificial intelligence.
+                </p>
+
+                {/* Email Interactive Bar */}
+                <div className="contact-email-bar">
+                  <div className="email-meta">
+                    <span className="email-kicker">DIRECT INBOX</span>
+                    <a href={`mailto:${personalInfo.email}`} className="email-text">
+                      {personalInfo.email}
+                    </a>
+                  </div>
+                  <div className="email-btns">
+                    <button
+                      type="button"
+                      className={`email-action-copy ${copiedEmail ? 'is-copied' : ''}`}
+                      onClick={handleCopyEmail}
+                      data-testid="contact-copy-email-button"
+                      aria-label="Copy email address"
+                    >
+                      {copiedEmail ? 'COPIED TO CLIPBOARD! ✨' : 'COPY EMAIL 📋'}
+                    </button>
+                    <a
+                      href={`mailto:${personalInfo.email}`}
+                      className="email-action-send"
+                      data-testid="contact-email-link"
+                    >
+                      SEND EMAIL ↗
+                    </a>
+                  </div>
+                </div>
+
+                {/* Quick Action Grid Cards */}
+                <div className="contact-cards-grid">
+                  <a
+                    href={personalInfo.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="contact-card"
+                    data-testid="contact-github-link"
+                  >
+                    <div className="contact-card-top">
+                      <span className="contact-card-pill">GITHUB</span>
+                      <span className="contact-card-arrow">↗</span>
+                    </div>
+                    <strong>Source Code & Repositories</strong>
+                    <small>Fitmadix, The Baking Nest, E-Shopping</small>
+                  </a>
+
+                  <a
+                    href={personalInfo.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="contact-card"
+                    data-testid="contact-linkedin-link"
+                  >
+                    <div className="contact-card-top">
+                      <span className="contact-card-pill">LINKEDIN</span>
+                      <span className="contact-card-arrow">↗</span>
+                    </div>
+                    <strong>Professional Network</strong>
+                    <small>premsharmatech • Connect with me</small>
+                  </a>
+
+                  <a
+                    href={personalInfo.resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download="Prem-Sharma-Resume-ATS.pdf"
+                    className="contact-card contact-card-highlight"
+                    data-testid="contact-resume-link"
+                  >
+                    <div className="contact-card-top">
+                      <span className="contact-card-pill highlight-pill">ATS RESUME</span>
+                      <span className="contact-card-arrow">↓</span>
+                    </div>
+                    <strong>Download Resume (PDF)</strong>
+                    <small>Updated 2026 • Verified ATS Format</small>
+                  </a>
+
+                  <button
+                    type="button"
+                    className="contact-card contact-card-recruiter"
+                    onClick={() => setRecruiterMode(true)}
+                    data-testid="contact-recruiter-button"
+                  >
+                    <div className="contact-card-top">
+                      <span className="contact-card-pill recruiter-pill">RECRUITER VIEW</span>
+                      <span className="contact-card-arrow">→</span>
+                    </div>
+                    <strong>Switch to Recruiter Mode</strong>
+                    <small>Academics, Skills & Project Matrix</small>
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Column: Framed Anime Manga Scene */}
+              <div className="contact-art-panel">
+                <div className="manga-frame-card animate-float">
+                  <div className="manga-frame-topbar">
+                    <span className="frame-scene-tag">SCENE / CHAPTER 01 END</span>
+                    <span className="frame-loc-tag">KOLKATA • 2026</span>
+                  </div>
+                  <div className="manga-frame-art">
+                    <img
+                      src={endingImg}
+                      alt="Anime illustration of Prem walking toward the next chapter"
+                      decoding="async"
+                      referrerPolicy="no-referrer"
+                      width="640"
+                      height="480"
+                      onError={() => {
+                        if (endingImg !== art.endingFallback) setEndingImg(art.endingFallback);
+                      }}
+                    />
+                    <div className="manga-art-vignette" />
+                    <span className="manga-stamp-badge">
+                      NEXT ARC<br />LOADING
+                    </span>
+                  </div>
+                  <div className="manga-frame-footer">
+                    <p>“The stack will change. The hunger to build won’t.”</p>
+                    <small>PREM SHARMA — TO BE CONTINUED →</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Non-Overlapping Footer */}
+            <div className="contact-footer-bar">
+              <div className="footer-bar-left">
+                <strong>PREM SHARMA</strong>
+                <span>AI & FULL-STACK DEVELOPER • BCA (CGPA 8.5)</span>
+              </div>
+              <div className="footer-bar-center">
+                <span>SWAMI VIVEKANANDA UNIVERSITY • KOLKATA, INDIA</span>
+              </div>
+              <div className="footer-bar-right">
+                <span>TO BE CONTINUED → CHAPTER 2026</span>
+              </div>
+            </div>
           </div>
         </section>
       </main>
