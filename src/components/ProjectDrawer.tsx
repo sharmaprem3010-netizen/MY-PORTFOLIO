@@ -9,11 +9,15 @@ interface ProjectDrawerProps {
 export default function ProjectDrawer({ project, onClose }: ProjectDrawerProps) {
   useEffect(() => {
     if (!project) return;
+    document.body.style.overflow = 'hidden';
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [project, onClose]);
 
   if (!project) return null;
@@ -32,17 +36,21 @@ export default function ProjectDrawer({ project, onClose }: ProjectDrawerProps) 
         onClick={(event) => event.stopPropagation()}
         data-testid="project-detail-drawer"
       >
-        <button
-          type="button"
-          className="drawer-close"
-          onClick={onClose}
-          data-testid="project-detail-close-button"
-        >
-          CLOSE ×
-        </button>
-        <p className="eyebrow">
-          PROJECT {project.number} / {project.status}
-        </p>
+        <div className="drawer-top-bar">
+          <p className="eyebrow">
+            PROJECT {project.number} / {project.status}
+          </p>
+          <button
+            type="button"
+            className="drawer-close"
+            onClick={onClose}
+            aria-label="Close project details"
+            data-testid="project-detail-close-button"
+          >
+            CLOSE ×
+          </button>
+        </div>
+
         <h2>{project.name}</h2>
         <p className="drawer-statement">{project.statement}</p>
         {project.overview && (
@@ -61,6 +69,7 @@ export default function ProjectDrawer({ project, onClose }: ProjectDrawerProps) 
             STATUS<strong>{project.status}</strong>
           </span>
         </div>
+
         {project.highlights && project.highlights.length > 0 && (
           <div className="drawer-highlights" style={{ marginTop: '24px', borderTop: '1px solid var(--line)', paddingTop: '20px' }}>
             <span style={{ color: '#777', font: "9px 'JetBrains Mono Variable', monospace", letterSpacing: '0.12em', display: 'block', marginBottom: '12px' }}>
@@ -75,6 +84,7 @@ export default function ProjectDrawer({ project, onClose }: ProjectDrawerProps) 
             </ul>
           </div>
         )}
+
         <div className="drawer-links">
           {project.liveUrl && (
             <a

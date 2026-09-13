@@ -23,6 +23,7 @@ export default function ProjectCard({ project, onOpen }: ProjectCardProps) {
           src={imgSrc}
           alt={`Original anime illustration for ${project.name}`}
           loading="lazy"
+          decoding="async"
           referrerPolicy="no-referrer"
           onError={() => {
             if (project.fallbackImage && imgSrc !== project.fallbackImage) {
@@ -30,11 +31,14 @@ export default function ProjectCard({ project, onOpen }: ProjectCardProps) {
             }
           }}
         />
-        <span className="project-open">OPEN ↗</span>
+        <span className="project-open">
+          <span>OPEN</span>
+          <span className="open-arrow">↗</span>
+        </span>
       </div>
       <div className="project-topline">
         <span>PROJECT {project.number}</span>
-        <span>{project.status}</span>
+        <span className="project-status-pill">{project.status}</span>
       </div>
       <h3 data-testid={`project-${testIdKey}-title`}>{project.name}</h3>
       <p className="project-type">{project.type}</p>

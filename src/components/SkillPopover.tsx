@@ -24,23 +24,35 @@ export default function SkillPopover({ skill, onClose }: SkillPopoverProps) {
     `${skill} is part of the toolkit Prem uses to turn questions into experiments. Details are intentionally evolving.`;
 
   return (
-    <div
-      className="skill-popover"
-      role="dialog"
-      aria-label={`${skill} information`}
-      data-testid="skill-information-panel"
-    >
-      <span className="eyebrow">SKILL NOTE</span>
-      <button
-        type="button"
+    <>
+      {/* Mobile backdrop for outside tap dismissal */}
+      <div
+        className="skill-popover-backdrop"
         onClick={onClose}
-        aria-label="Close skill information"
-        data-testid="skill-information-close-button"
+        role="presentation"
+      />
+      <div
+        className="skill-popover"
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${skill} information`}
+        data-testid="skill-information-panel"
       >
-        ×
-      </button>
-      <h3>{skill}</h3>
-      <p>{description}</p>
-    </div>
+        <div className="skill-popover-header">
+          <span className="eyebrow">SKILL NOTE</span>
+          <button
+            type="button"
+            className="skill-popover-close"
+            onClick={onClose}
+            aria-label="Close skill information"
+            data-testid="skill-information-close-button"
+          >
+            ×
+          </button>
+        </div>
+        <h3>{skill}</h3>
+        <p>{description}</p>
+      </div>
+    </>
   );
 }
