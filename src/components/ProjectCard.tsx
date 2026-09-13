@@ -22,8 +22,9 @@ export default function ProjectCard({ project, onOpen }: ProjectCardProps) {
         <img
           src={imgSrc}
           alt={`Original anime illustration for ${project.name}`}
-          loading="lazy"
           decoding="async"
+          width="400"
+          height="260"
           referrerPolicy="no-referrer"
           onError={() => {
             if (project.fallbackImage && imgSrc !== project.fallbackImage) {
