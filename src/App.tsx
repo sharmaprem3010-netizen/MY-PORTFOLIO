@@ -122,7 +122,7 @@ export default function App() {
               <img
                 src={labImg}
                 alt="Original anime illustration of Prem in a technology lab"
-                loading="lazy"
+                decoding="async"
                 referrerPolicy="no-referrer"
                 onError={() => {
                   if (labImg !== art.labFallback) setLabImg(art.labFallback);
@@ -356,7 +356,7 @@ export default function App() {
               <img
                 src={labImg}
                 alt="Original anime illustration of Prem exploring AI systems"
-                loading="lazy"
+                decoding="async"
                 referrerPolicy="no-referrer"
                 onError={() => {
                   if (labImg !== art.labFallback) setLabImg(art.labFallback);
@@ -391,7 +391,7 @@ export default function App() {
             <img
               src={endingImg}
               alt="Original anime illustration of Prem walking toward the next chapter"
-              loading="lazy"
+              decoding="async"
               referrerPolicy="no-referrer"
               onError={() => {
                 if (endingImg !== art.endingFallback) setEndingImg(art.endingFallback);

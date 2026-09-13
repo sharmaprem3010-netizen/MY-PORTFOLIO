@@ -97,17 +97,15 @@ export default function Navigation({ progress, onNavigate, onOpenRecruiter }: Na
           </button>
 
           <button
-            className="menu-button"
+            className="recruiter-nav-button"
             type="button"
             onClick={onOpenRecruiter}
             aria-label="Open recruiter mode"
             data-testid="recruiter-mode-open-button"
           >
-            <span />
-            <span />
-            <small>
-              RECRUITER<br />MODE
-            </small>
+            <span className="recruiter-accent-bar" aria-hidden="true" />
+            <span className="recruiter-text-desktop">RECRUITER MODE</span>
+            <span className="recruiter-text-mobile">RECRUITER</span>
           </button>
         </div>
       </nav>
