@@ -7,4 +7,4 @@ Allow: /images/
 Allow: /assets/
 
 # Sitemap location
-Sitemap: https://sharmaprem3010-netizen.github.io/MY-PORTFOLIO/sitemap.xml
+Sitemap: https://prem-sharma.vercel.app/sitemap.xml

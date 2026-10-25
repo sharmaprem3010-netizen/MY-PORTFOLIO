@@ -20,7 +20,7 @@ export const personalInfo = {
   location: 'Kolkata, West Bengal, India',
   linkedin: 'https://www.linkedin.com/in/premsharmatech',
   github: 'https://github.com/sharmaprem3010-netizen',
-  portfolio: 'https://sharmaprem3010-netizen.github.io/MY-PORTFOLIO',
+  portfolio: 'https://prem-sharma.vercel.app',
   resumeUrl: '/Prem-Sharma-Resume-ATS.pdf',
   summary:
     'Second-year BCA (Computer Science) student with hands-on experience building and deploying full-stack web applications and AI-integrated tools using Python, HTML5, CSS, and JavaScript. Delivered 3+ production-deployed projects spanning conversational AI, e-commerce, and responsive web design. Strong foundation in Data Structures and Algorithms and Git/GitHub workflows. Seeking an AI Engineering or Full-Stack Developer role to apply technical and problem-solving skills in real-world software systems.',
