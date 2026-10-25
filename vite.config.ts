@@ -11,8 +11,18 @@ export default defineConfig(() => {
         '@': path.resolve(__dirname, '.'),
       },
     },
+    base: '/MY-PORTFOLIO/',
     server: {
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
+    },
+    build: {
+      outDir: 'dist',
+      sourcemap: true,
+      rollupOptions: {
+        output: {
+          manualChunks: undefined,
+        },
+      },
     },
   };
 });

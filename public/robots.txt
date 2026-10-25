@@ -1,0 +1,10 @@
+# robots.txt for Prem Sharma Portfolio
+User-agent: *
+Allow: /
+
+# Allow all important assets
+Allow: /images/
+Allow: /assets/
+
+# Sitemap location
+Sitemap: https://sharmaprem3010-netizen.github.io/MY-PORTFOLIO/sitemap.xml
